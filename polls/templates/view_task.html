@@ -1,0 +1,145 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+<div class="w-full">
+
+    <div class="flex lg:justify-between justify-center items-center">
+        <div class="hidden lg:block">
+            <h1 class="text-3xl font-bold pb-3">Task</h1>
+<p class="text-gray-500 text-[13px] pb-3">Task table</p>
+        </div>
+
+        <div class="flex gap-10 items-center justify-end lg:w-[80%] w-full">
+                
+
+
+            <!-- filter search form  -->
+
+            
+                <form method="GET" action="{% url 'vew_task_ass' %}" class="justify-end flex items-end  gap-2 w-full ">
+                   
+                
+                    {{ task_fil.form.as_p }}
+                    <button id="ser" type="submit" class="w-10 h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                        <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                        
+                    </button>
+                
+                    
+                </form>
+                
+            
+
+        </div>  
+    </div>
+
+
+
+    <div class="w-full flex flex-col  pt-5">
+        <div class="block lg:hidden">
+            <h1 class="text-3xl font-bold pb-3">Task</h1>
+<p class="text-gray-500 text-[13px] pb-3">Task table</p>
+        </div>
+    <div class="max-w-full overflow-x-auto ">
+    <table class="w-full table-auto overflow-x-auto">
+        <thead>
+           <tr class="text-center bg-slate-900">
+              <th class="emp-custom-style-head">task_id</th>
+              <th class="emp-custom-style-head">task_type</th>
+              <th class="emp-custom-style-head">description</th>
+              <th class="emp-custom-style-head">status</th>
+              <th class="emp-custom-style-head">due_date</th>
+           </tr>
+        </thead>
+        <tbody>
+         {% for task in task_fil.qs %}
+           <tr>
+              <td class="emp-table-sty">{{task.task_id}}</td>
+              <td class="emp-table-sty">{{task.task_type}}</td>
+              <td class="emp-table-sty">{{task.description}}</td>
+              <td class="emp-table-sty">{{task.status}}</td>
+              <td class="emp-table-sty">{{task.due_date}}</td>
+           </tr>
+         {% endfor %}
+        </tbody>
+     </table>
+     </div>
+    </div>
+
+    <div class="flex gap-3 items-center h-20 pt-5">
+        <p class="text-gray-600 text-sm">Add a Task</p>
+        <a href="{% url 'create_task'   %}" class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2">Add</a>
+     </div>
+
+
+<!-- task assignment  -->
+
+
+    <div class="flex lg:justify-between justify-center items-center pt-4">
+        <div class="hidden lg:block">
+            <h1 class="text-2xl font-bold pb-3">Task Assignment</h1>
+<p class="text-gray-500 text-[13px] pb-3">Task Assignment table</p>
+        </div>
+
+        <div class="flex gap-10 items-center justify-end lg:w-[80%] w-full">
+                
+
+
+            <!-- filter search form  -->
+
+            
+                <form method="GET" action="{% url 'vew_task_ass' %}" class="justify-end flex items-end  gap-2 w-full ">
+                   
+                
+                    {{ task_ass_fil.form.as_p }}
+                    <button id="ser" type="submit" class="w-10 h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                        <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                        
+                    </button>
+                
+                    
+                </form>
+                
+            
+
+        </div>  
+    </div>
+
+
+
+    <div class="w-full flex flex-col  pt-5">
+        <div class="block lg:hidden">
+            <h1 class="text-3xl font-bold pb-3">Task</h1>
+<p class="text-gray-500 text-[13px] pb-3">Task table</p>
+        </div>
+    <div class="max-w-full overflow-x-auto ">
+    <table class="w-full table-auto overflow-x-auto">
+        <thead>
+           <tr class="text-center bg-slate-900">
+              <th class="emp-custom-style-head">task_assignment_id</th>
+              <th class="emp-custom-style-head">task</th>
+              <th class="emp-custom-style-head">employee</th>
+              <th class="emp-custom-style-head">assigned_date</th>
+           </tr>
+        </thead>
+        <tbody>
+         {% for task in task_ass_fil.qs %}
+           <tr>
+              <td class="emp-table-sty">{{task.task_assignment_id}}</td>
+              <td class="emp-table-sty">{{task.task}}</td>
+              <td class="emp-table-sty">{{task.employee}}</td>
+              <td class="emp-table-sty">{{task.assigned_date}}</td>
+           </tr>
+         {% endfor %}
+        </tbody>
+     </table>
+     </div>
+    </div>
+
+    <div class="flex gap-3 items-center h-20 pt-5">
+        <p class="text-gray-600 text-sm">Add a Task Assignment</p>
+        <a href="{% url 'task_assign'   %}" class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2">Add</a>
+     </div>
+
+</div>
+{% endblock %}

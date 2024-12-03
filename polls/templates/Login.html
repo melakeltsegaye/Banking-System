@@ -1,0 +1,27 @@
+{% load static tailwind_tags %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% tailwind_css %}
+    <title>Document</title>
+</head>
+<body class="w-screen h-screen flex items-center justify-center">
+    <div class=" w-[90%] md:w-1/3 bg-slate-100 py-10 rounded-md shadow-lg flex-wrap flex flex-col justify-center items-center">
+        <div class="flex pt-3 pb-3 items-center cursor-pointer">
+            <img src="../../media/logo-removebg-preview.png" class="w-14 h-auto" alt="Logo">
+            <h1 class="font-bold">SIKET BANK</h1>
+        </div>
+        <form class="space-y-5 " method="POST" autocomplete="off">
+            {% csrf_token %}
+            {{log|crispy}}
+        
+            <button type="submit" class="p-1 w-full rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2">Submit</button>
+        </form>
+    </div>
+    
+</body>
+</html>

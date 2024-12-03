@@ -1,0 +1,36 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+<div class="flex items-center w-full h-full justify-center">
+    <div class="w-[95%] md:w-[70%] min-w-[50%] bg-slate-100 p-4 rounded-md shadow-lg flex-wrap flex items-start justify-between">
+        <div class="pt-4">
+            <h1 class="text-lg font-bold">Loan info form</h1>
+            <p class="text-gray-500 text-[13px] pb-3">Fill Loan info</p>
+        </div>
+        <form class="space-y-2 " method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="grid grid-cols-2 gap-4">
+                <div>{{form.user|as_crispy_field}}</div>
+                <div>{{form.amount|as_crispy_field}}</div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>{{form.collateral|as_crispy_field}}</div>
+                <div>{{form.interest_rate|as_crispy_field}}</div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>{{form.status|as_crispy_field}}</div>
+                <div>{{form.end_date|as_crispy_field}}</div>
+            </div>
+            <div>{{form.repayment_schedule|as_crispy_field}}</div>
+            
+            <div class="flex gap-2">
+                <button type="submit" class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2">Submit</button>
+                
+                
+            </div>
+            
+        </form>
+    </div>
+    
+</div>
+{% endblock %}

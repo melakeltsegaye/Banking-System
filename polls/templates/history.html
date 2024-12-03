@@ -1,0 +1,507 @@
+{% extends 'home.html' %}
+{% block main %}
+<div class="w-ful">
+    <div>
+        <h1 class="text-3xl font-bold pb-3">History Log</h1>
+                    <p class="text-gray-500 text-[13px] ">All History Logs</p>
+    </div>
+    <div class="w-full gap-5 overflow-x-auto md:overflow-hidden flex md:justify-between py-7">
+        <div>
+            <a class="History_log_icon" href="">
+                <span class="material-symbols-outlined History_log_icon_style">
+                    approval_delegation
+                    </span>
+                    <h1 class="text-md font-bold">Payment</h1>
+            </a>
+        </div>
+        <div >
+            <a class="History_log_icon" href="">
+                <span class="material-symbols-outlined History_log_icon_style">
+                    person_apron
+                    </span> 
+                    <h1 class="text-md font-bold">Employee</h1>
+            </a>
+        </div>
+        <div >
+            <a class="History_log_icon" href="">
+                <span class="material-symbols-outlined History_log_icon_style">
+                    payments
+                    </span>
+                    <h1 class="text-md font-bold">Loan</h1>
+            </a>
+        </div>
+        <div >
+            <a class="History_log_icon" href="">
+                <span class="material-symbols-outlined History_log_icon_style">
+                    account_circle
+                    </span>
+                    <h1 class="text-md font-bold">User</h1>
+            </a>
+        </div>
+        <div >
+            <a class="History_log_icon" href="">
+                <span class="material-symbols-outlined History_log_icon_style">
+                    move_up
+                    </span>
+                    <h1 class="text-md font-bold">Transaction</h1>
+            </a>
+        </div>
+        <div >
+            <a class="History_log_icon" href="">
+                <span class="material-symbols-outlined History_log_icon_style">
+                    checklist
+                    </span> 
+                    <h1 class="text-md font-bold">Task</h1>
+            </a>
+        </div>
+        <div >
+            <a class="History_log_icon" href="">
+                <span class="material-symbols-outlined History_log_icon_style">
+                    account_tree
+                    </span>
+                    <h1 class="text-md font-bold">Branch</h1>
+            </a>
+        </div>
+        <div>
+            <a class="History_log_icon" href="">
+                <span class="material-symbols-outlined History_log_icon_style">
+                account_balance_wallet
+                </span>
+                <h1 class="text-md font-bold">Account</h1>
+            </a>
+            
+        </div>
+        <div>
+            <a class="History_log_icon" href="">
+                <span class="material-symbols-outlined History_log_icon_style">
+                savings
+                </span>
+                <h1 class="text-md font-bold">Saving</h1>
+            </a>
+            
+        </div>
+    </div>
+    <p class="text-gray-500 text-[13px] pb-3">All History Logs</p>
+    <div class="  w-full overflow-x-auto  pb-3">
+        <div class="flex gap-3 md:w-max md:flex-row flex-col w-full">
+
+<!-- employee  -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">Employee Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in Employee_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </div>
+    
+<!-- breanch  -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">Branch Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in Branch_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+<!-- Account              -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">Account Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in Account_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+<!-- CheckingAccount -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">CheckingAccount Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in CheckingAccount_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+<!-- SavingsAccount -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">SavingsAccount Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in SavingsAccount_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+<!-- FixedDepositAccount -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">FixedDepositAccount Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in FixedDepositAccount_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+<!-- Tempemployee_history -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">Tempemployee Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in Tempemployee_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+<!-- Loan              -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">Loan Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in Loan_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+<!-- Transaction              -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">Transaction Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in Transaction_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+<!-- Task  -->
+
+            <div class="History_log_card">
+                <h1 class="History_log_text">Task Log</h1>
+                <table class="min-w-full table-auto ">
+                    <thead class="bg-slate-900 text-white">
+                        <tr class=" text-left">
+                            <th class="px-4 py-2 border ">Date</th>
+                            <th class="px-4 py-2 border ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in Task_history|slice:":10" %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                <td class="px-4 py-2 border ">
+                                    {% if record.history_type == '+' %}
+                                        Created
+                                    {% elif record.history_type == '~' %}
+                                        Updated
+                                    {% elif record.history_type == '-' %}
+                                        Deleted
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+                
+                            
+                
+                <!-- Task Assignment  -->
+                
+                            <div class="History_log_card">
+                                <h1 class="History_log_text">Task Assignment Log</h1>
+                                <table class="min-w-full table-auto ">
+                                    <thead class="bg-slate-900 text-white">
+                                        <tr class=" text-left">
+                                            <th class="px-4 py-2 border ">Date</th>
+                                            <th class="px-4 py-2 border ">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for record in TaskAssignment_history|slice:":10" %}
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                                <td class="px-4 py-2 border ">
+                                                    {% if record.history_type == '+' %}
+                                                        Created
+                                                    {% elif record.history_type == '~' %}
+                                                        Updated
+                                                    {% elif record.history_type == '-' %}
+                                                        Deleted
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                
+                
+                            
+                
+                <!-- collateral  -->
+                
+                            <div class="History_log_card">
+                                <h1 class="History_log_text">Collateral Log</h1>
+                                <table class="min-w-full table-auto ">
+                                    <thead class="bg-slate-900 text-white">
+                                        <tr class=" text-left">
+                                            <th class="px-4 py-2 border ">Date</th>
+                                            <th class="px-4 py-2 border ">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for record in Collateral_history|slice:":10" %}
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="px-4 py-2 border ">{{ record.history_date }}</td>
+                                                <td class="px-4 py-2 border ">
+                                                    {% if record.history_type == '+' %}
+                                                        Created
+                                                    {% elif record.history_type == '~' %}
+                                                        Updated
+                                                    {% elif record.history_type == '-' %}
+                                                        Deleted
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td colspan="3" class="px-4 py-2 text-center text-gray-500">No history available.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                
+        </div>
+    </div>
+
+</div>
+{% endblock %}

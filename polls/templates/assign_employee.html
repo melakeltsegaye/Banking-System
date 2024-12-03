@@ -1,0 +1,22 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+<div class="flex items-center w-full h-full justify-center">
+    <div class="w-[90%] md:w-1/2 bg-slate-100 p-4 rounded-md shadow-lg flex-wrap flex items-start justify-between">
+        <div class="pt-4">
+            <h1 class="text-lg font-bold">Add Employee</h1>
+            <p class="text-gray-500 text-[13px] pb-3">Fill the info</p>
+        </div>
+        <form class="space-y-5 "  method="POST" autocomplete="off">
+            {% csrf_token %}
+            {{form|crispy}}
+            <div class="flex gap-2">
+                <button type="submit" class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2">Submit</button>
+                
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+                {% endblock %}

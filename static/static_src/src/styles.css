@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  
+  /* width */
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background: #1dc26f; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+  background: #19a35e;
+}
+
+  .my-custom-style {
+    @apply w-1/6 min-w-[160px] border-l border-transparent py-2 px-1 text-lg font-medium text-white lg:py-4 lg:px-2;
+  }
+
+  .my-layout-style {
+    @apply text-slate-900 border-b border-l  bg-white  border-gray-100  py-3 px-2 text-center text-base font-medium;
+  }
+
+  .emp-custom-style-head {
+    @apply   border-l border-transparent py-2 px-1 text-lg font-medium text-white lg:py-2 lg:px-2;
+  }
+
+  .emp-table-sty {
+    @apply text-slate-900 border-b border-l  bg-white  border-gray-100  py-2 px-2 text-center text-base font-medium;
+  }
+  
+
+  .History_log_icon {
+    @apply flex flex-col items-center justify-center w-fit h-fit gap-2;
+  }
+  
+  .History_log_icon_style {
+    @apply p-3 text-white rounded-full bg-slate-900 border-lime-500 border-4;
+  }
+  
+
+  .History_log_card {
+    @apply w-full md:w-72 h-96 bg-gray-100 rounded-md p-2 overflow-y-auto shadow-md;
+  }
+
+  .History_log_text {
+    @apply text-sm font-bold text-lime-500 underline decoration-solid pb-2 w-full flex items-center justify-start;
+  }
+
+  .fc-prev-button, .fc-next-button, .fc-today-button {
+    @apply bg-green-500 text-white border-none py-2 px-4 rounded-lg cursor-pointer;
+}
+
+.fc-prev-button:hover, .fc-next-button:hover, .fc-today-button:hover {
+    @apply bg-green-600; /* Darker shade on hover */
+}
+
+/* FullCalendar month header styles */
+.fc-toolbar-title {
+    @apply text-lg font-bold text-gray-800 text-center my-2;
+}
+  
+}

@@ -1,0 +1,137 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+<div class="w-full">
+    
+    <div class="flex lg:justify-between justify-center items-center">
+        <div class="hidden lg:block">
+            <h1 class="text-3xl font-bold pb-3">Employee</h1>
+<p class="text-gray-500 text-[13px] pb-3">Employee table</p>
+        </div>
+
+        <div class="flex gap-10 items-center justify-end lg:w-[80%] w-full">
+                
+
+
+            <!-- filter search form  -->
+
+            
+                <form method="GET" action="{% url 'employee_view' %}" class=" justify-end w-full flex items-end  gap-2">
+                   
+                
+                    {{ filter.form.as_p }}
+                    <button id="ser" type="submit" class="w-10 h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                        <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                        
+                    </button>
+                
+                    
+                </form>
+                
+            
+
+        </div>  
+    </div>
+
+    
+     
+ 
+        
+    
+   
+       
+    <div class="w-full flex flex-col  pt-5">
+        <div class="block lg:hidden">
+            <h1 class="text-3xl font-bold pb-3">Employee</h1>
+<p class="text-gray-500 text-[13px] pb-3">Employee table</p>
+        </div>
+    <div class="max-w-full overflow-x-auto ">
+    <table class="w-full table-auto overflow-x-auto">
+        <thead>
+           <tr class="text-center bg-slate-900">
+              <th class="emp-custom-style-head">employee_id</th>
+              <th class="emp-custom-style-head">user</th>
+              <th class="emp-custom-style-head">phone</th>
+              <th class="emp-custom-style-head">address</th>
+              <th class="emp-custom-style-head">position</th>
+              <th class="emp-custom-style-head">salary</th>
+              <th class="emp-custom-style-head">date_of_hire</th>
+              <th class="emp-custom-style-head">department</th>
+              <th class="emp-custom-style-head">branch</th>
+              <th class="emp-custom-style-head">update</th>
+              <th class="emp-custom-style-head">delete</th>
+           </tr>
+        </thead>
+        <tbody>
+         {% for emp in filter.qs %}
+           <tr>
+              <td class="emp-table-sty">{{emp.employee_id}}</td>
+              <td class="emp-table-sty">{{emp.user}}</td>
+              <td class="emp-table-sty">{{emp.phone}}</td>
+              <td class="emp-table-sty">{{emp.address}}</td>
+              <td class="emp-table-sty">{{emp.position}}</td>
+              <td class="emp-table-sty">{{emp.salary}}</td>
+              <td class="emp-table-sty">{{emp.date_of_hire}}</td>
+              <td class="emp-table-sty">{{emp.department}}</td>
+              <td class="emp-table-sty">{{emp.branch}}</td>
+              <td class="my-layout-style"><a href="{% url 'employee_update' emp.employee_id %}">Change</a></td>
+              <td class="my-layout-style"><a href="{% url 'employee_delete' emp.employee_id  %}" class="p-2 rounded-md bg-red-500 text-white border-red-600 shadow-md border-2">Delete</a></td>
+           </tr>
+         {% endfor %}
+        </tbody>
+     </table>
+     </div>
+    </div>
+
+     <div class="pt-9">
+        <p class="text-gray-500 text-[13px] pb-3">Employee chart</p>
+        <canvas id="myChart"></canvas>
+      </div>
+      <div class="flex gap-3 items-center h-20 pt-5">
+        <p class="text-gray-600 text-sm">Add a new branch{{ request.GET.q }}</p>
+        <a href="{% url 'temp_employee'   %}" class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2">Add</a>
+     </div>
+     
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+      <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+    
+        // Ensure labels and data are passed as JavaScript arrays
+        const labels = {{ labels|safe }};
+        const data = {{ data|safe }};
+    
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Employees',
+                    data: data,
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Employees'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Positions'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+</div>
+{% endblock %}

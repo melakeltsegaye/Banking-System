@@ -1,0 +1,1414 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">    
+    {% tailwind_css %}
+    <title>Document</title>
+</head>
+
+<body class= "overflow-hidden">
+
+    <div class="flex  w-screen h-screen overflow-y-hidden">
+
+        <!-- sid bar  -->
+
+        <div id="sid-bar" class=" hidden md:w-[30%] lg:w-[20%] h-full bg-slate-900 p-1 lg:p-4 text-white  md:flex flex-col ease-in duration-300 items-center overflow-y-auto space-y-[0.5rem]">
+            <div class=" w-full flex justify-between items-center">
+                <a class="flex w-full pt-3 pb-3 items-center" href="{% url '' %}">
+                    <img src="../../media/logo-removebg-preview.png" class="w-12 min-w-8 h-auto" alt="Logo">
+                <h1>SIKET BANK</h1>
+                </a>
+                <span onclick="toggleSidebar()" class="material-symbols-outlined text-lime-500 cursor-pointer block md:hidden" >
+                    arrow_left_alt
+                    </span>
+            </div>
+
+
+<!-- home  -->
+            
+            <div class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2">
+                <div class="flex  justify-between w-full">
+                    <a class=" flex items-center " href="{% url '' %}">
+                        <span class="material-symbols-outlined">
+                        home
+                        </span> <h1>Home</h1>
+                    </a>
+                    
+                </div>
+                
+                    
+            </div>
+
+
+<!-- notification  -->
+
+<div class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2 ">
+    <div id="sid_con" class="flex justify-between">
+        <a  class=" flex gap-1 items-center" href="{% url 'send_notification' request.user.username %}"><span class="material-symbols-outlined">
+            notifications
+            </span> <h1>Notifications</h1></a>
+
+           
+    </div>
+    
+   
+</div>
+
+<!-- branch  -->
+
+
+            {% if perms.polls.view_branch %}
+            <div class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2">
+                <div id="sid_con" class="flex justify-between ">
+                    <a class=" flex items-center gap-1" href="{% url 'Branchview' %}">
+                        <span class="material-symbols-outlined">
+                            account_tree
+                            </span> <h1> Branch</h1>
+                    </a>
+                    <span id="drop" class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer">
+                        keyboard_arrow_down
+                        </span>
+                </div>
+                
+                    <div id="dropdown-content" class="hidden  ">
+                        {% if perms.polls.view %}
+                        <a class="block px-4 py-2 " href="{% url 'create_branch' %}">Add Branch</a>
+                        {% endif %}
+                    </div>
+            </div>
+            {% endif %}
+
+<!-- employee  -->
+
+            {% if perms.polls.view_employee %}
+            <div  class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2">
+                <div id="sid_con" class="flex justify-between ">
+                    <a class="flex items-center  gap-1" href="{% url 'employee_view' %}">
+                        <span class="material-symbols-outlined">
+                        person_apron
+                        </span> 
+                        <h1>Employee</h1>
+                    </a>
+                        <span id="drop" class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer">
+                            keyboard_arrow_down
+                        </span>
+                </div>
+                 
+
+                    <div id="dropdown-content" class="hidden  ">
+                        {% if request.user.is_superuser %}
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'temp_employee' %}">Add Employee</a>
+                        {% endif %}
+                        {% if user.groups.first.name == 'HR Specialist' %}
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'view_temp_employee_list' %}">Approve Employee</a>
+                        {% endif %}
+                    </div>
+                    
+            </div>
+            {% endif %}
+
+<!-- groups              -->
+
+            {% if perms.polls.view_group %}
+            <div  class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2">
+                <div id="sid_con" class="flex justify-between ">
+                    <a class="w-auto flex items-center gap-1" href="{% url 'select_group' %}"><span class="material-symbols-outlined">
+                        groups
+                        </span> <h1>Group</h1></a>
+                        <span id="drop" class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer">
+                            keyboard_arrow_down
+                            </span>
+                </div>
+                
+
+                    <div id="dropdown-content" class="hidden ">
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'remove_user_from_group' %}">Remove user</a>
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'assign_employee' %}">Assign group</a>
+                    </div>
+            </div>
+            {% endif %}
+
+<!-- History log  -->
+
+            {% if request.user.is_superuser %}
+            <div  class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2">
+                <div id="sid_con" class="flex justify-between ">
+                    <a class="w-auto flex items-center gap-1" href="{% url 'History_log' %}"><span class="material-symbols-outlined">
+                        history
+                        </span> <h1>History log</h1></a>
+                        <span id="drop" class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer">
+                            keyboard_arrow_down
+                            </span>
+                </div>
+                
+
+                    <div id="dropdown-content" class="hidden ">
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'branch_log' %}">Branch log</a>
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'employee_log' %}">Employee log</a>
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'loan_log' %}">Loan log</a>
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'task_log' %}">Task log</a>
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'account_log' %}">Account log</a>
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'transaction_log' %}">Transaction log</a>
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'loan_payment_log' %}">LoanPayment log</a>
+                    </div>
+            </div>
+            {% endif %}
+
+<!-- Loan  -->
+
+            {% if perms.polls.add_loan %}
+            <div  class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2">
+                <div id="sid_con" class="flex justify-between ">
+                    <a class="w-auto flex items-center gap-1" href="{% url 'Loan_managment' %}"><span class="material-symbols-outlined">
+                        payments
+                        </span> <h1>Loan management</h1></a>
+                        <span id="drop" class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer">
+                            keyboard_arrow_down
+                            </span>
+                </div>
+                
+
+                    <div id="dropdown-content" class="hidden ">
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'create_collateral' %}">Loan form</a>
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'loan_payment' %}">Loan paiment</a>
+                    </div>
+            </div>
+            {% endif %}
+
+<!-- personal Loan  -->
+
+            {% if user.groups.first.name != 'admin' and user.groups.first.name != 'Customer Service Representative' and user.groups.first.name != 'Loan Officer' and user.groups.first.name != 'HR Specialist' and user.groups.first.name != 'Branch Manager'  %}
+            <div  class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2">
+                <div id="sid_con" class="flex justify-between ">
+                    <a class="w-auto flex items-center gap-1" href="{% url 'per_loan' %}"><span class="material-symbols-outlined">
+                        payments
+                        </span> <h1>Loan status</h1></a>
+                        
+                </div>
+                
+
+                    
+            </div>
+            {% endif %}
+
+<!-- Account managment -->
+
+            {% if user.groups.first.name == 'Customer Service Representative' %}
+            <div  class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2">
+                <div id="sid_con" class="flex justify-between ">
+                    <a class="w-auto flex items-center gap-1" href="{% url 'Account_view' %}"><span class="material-symbols-outlined">
+                        manage_accounts
+                        </span> <h1>Manage Accounts</h1></a>
+                        <span id="drop" class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer">
+                            keyboard_arrow_down
+                            </span>
+                </div>
+                
+
+                    <div id="dropdown-content" class="hidden ">
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'create_acc' %}">Create Account</a>
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url 'Transaction_creation' %}">Transaction</a>
+                    </div>
+            </div>
+            {% endif %}
+
+            
+  
+
+<!-- Account -->
+
+{% if user.groups.first.name != 'admin' and user.groups.first.name != 'Customer Service Representative' and user.groups.first.name != 'Loan Officer' and user.groups.first.name != 'HR Specialist' and user.groups.first.name != 'Branch Manager'%}
+
+            <div  class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2">
+                <div id="sid_con" class="flex justify-between ">
+                    <a class="w-auto flex items-center gap-1" href="{% url 'Per_Account' %}">
+                        <span class="material-symbols-outlined">
+                        account_balance_wallet
+                        </span> <h1>Account</h1></a>
+                        <span id="drop" class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer">
+                            keyboard_arrow_down
+                            </span>
+                </div>
+                
+
+                    <div id="dropdown-content" class="hidden ">
+                        <a class="block px-4 py-2 hover:bg-slate-700" href="{% url '' %}">Account log</a>
+                    </div>
+            </div>
+            {% endif %}
+
+
+  
+ <!-- Task         -->
+
+ {% if perms.polls.add_taskassignment %}
+            <div class="w-full rounded-[5px] hover:bg-slate-700 bg-slate-800 h-max p-2 ">
+                <div id="sid_con" class="flex justify-between">
+                    <a class=" flex gap-1 items-center" href="{% url 'vew_task_ass' %}"><span class="material-symbols-outlined">
+                        checklist
+                        </span> <h1>Task</h1></a>
+    
+                        <span id="drop" class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer">
+                            keyboard_arrow_down
+                            </span>
+                </div>
+                <div id="dropdown-content" class="hidden  " >
+                    <a class="block px-4 py-2 hover:bg-slate-700"  href="{% url 'task_assign' %}">Assign Task</a>
+                    <a class="block px-4 py-2 hover:bg-slate-700"  href="{% url 'create_task' %}">Create Task</a>
+                </div>
+               
+            </div>
+            {% endif %}
+
+
+           
+
+
+        </div>
+
+        <!-- main section  -->
+
+
+        <div id="nav-manu" class="w-[100%] md:w-[70%] lg:w-[80%] h-screen ease-in duration-300 relative pb-5">
+
+            <!-- navigation  -->
+
+            <div class="w-full h-[8%] lg:h-16 p-3 bg-slate-900 md:bg-lime-500 flex justify-between items-center z-50">
+                <div class="md:flex hidden gap-2">
+                    <span id="toggleIcon" onclick="toggle()"  class="material-symbols-outlined text-gray-900" style="cursor: pointer;">
+                        arrow_left_alt
+                        </span> <p class="text-white">{% if user.groups.first.name %}
+                            {{user.groups.first.name}}
+                            {% else %} User {% endif %} Dashboard</p>
+                </div>
+                <div class="flex w-full  items-center cursor-pointer md:hidden">
+                    <img src="../../media/logo-removebg-preview.png" class="w-12 h-auto" alt="Logo">
+                    <h1 class="text-white">SIKET BANK</h1>
+                </div>
+                
+                <div class="flex gap-4 items-center">
+                    <!-- <button class="bg-slate-900 outline-none rounded-[30px] p-2">Contact</button> -->
+                     <div class="flex">
+                        <span id="room-name-submit" class="material-symbols-outlined text-lime-500 md:text-gray-900 text-[30px] cursor-pointer">
+                            notifications
+                            </span>
+                            <div id="notification-count" class="w-5 h-5 text-white flex items-center justify-center bg-red-500 rounded-full cursor-pointer">0</div>
+                     </div>
+                    
+
+                    <div  onclick="user_pro()" class="w-max h-max p-1 rounded-md bg-white flex items-center">
+
+                        {% if request.user.userprofile.profile_image %}
+                        <div class="w-7 h-7 md:w-10 md:h-10 rounded-full overflow-hidden flex justify-center items-center border-slate-900 border-2">
+                            <img src="{{ request.user.userprofile.profile_image.url }}" class="border-white rounded-full border-2 object-cover w-full h-full" alt="">
+                        </div>
+                            {% else %}
+                            <span class="material-symbols-outlined text-gray-900 text-[30px] cursor-pointer">
+                                account_circle
+                                </span>
+                            {% endif %}
+                            <p class="font-bold text-sm text-slate-900 pl-1">{{user}}</p>
+                            <span class="material-symbols-outlined text-gray-900 text-[25px] cursor-pointer hidden md:flex">
+                                keyboard_arrow_down
+                                </span>
+                            <span onclick="toggleSidebar()" class="material-symbols-outlined text-gray-900 text-[25px] cursor-pointer md:hidden">
+                                dock_to_right
+                                </span>
+                    </div>
+
+
+<!-- user pro toggle         -->
+
+
+                    <div id="user_pro_view" class="fixed top-16 right-16 w-52 rounded-md h-fit px-3 bg-slate-900 hidden" style="z-index: 1000;">
+                        <div class="flex gap-2 items-center border-b pb-2">
+                            {% if request.user.userprofile.profile_image %}
+                        <div class="w-7 h-7 md:w-10 md:h-10 rounded-full overflow-hidden flex justify-center items-center border-lime-500 border-2">
+                            <img src="{{ request.user.userprofile.profile_image.url }}" class="border-slate-900 rounded-full border-2 object-cover w-full h-full" alt="">
+                        </div>
+                            {% else %}
+                            <span class="material-symbols-outlined text-white text-[30px]  cursor-pointer">
+                                account_circle
+                                </span>
+                            {% endif %}
+                            <div>
+                                <h1 class="text-2xl font-bold  text-white">{{user.username}}</h1>
+                                <p class="text-gray-500 text-[13px] ">{{user.email}}</p>
+                            </div>
+                        </div>
+                        <a href="{% url 'log_out' %}" class="flex gap-2 py-3 w-full hover:bg-slate-700">
+                            <span class="material-symbols-outlined text-white">
+                                logout
+                                </span>
+                                <p class="text-white text-[13px] ">Log out</p>
+                                
+                            </a>
+
+                            {% if not user.userprofile.profile_image %}
+                        <a href="{% url 'user_profile' %}" class="flex gap-2 py-3 w-full hover:bg-slate-700">
+                            <span class="material-symbols-outlined text-white">
+                                edit
+                                </span>
+                                <p class="text-white text-[13px] ">Create profile</p>
+                                
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- main  -->
+
+            <div class="p-3 overflow-y-auto h-[92%] overflow-x-hidden w-full">
+
+
+                
+                {% block main %}
+                
+                
+
+                <div >
+
+                    <!-- Task prograse -->
+
+
+                    <h1 class="text-3xl font-bold pb-3">Home</h1>
+                    <p class="text-gray-500 text-[13px] pb-3">Home Status</p>
+                    <div class="flex w-full gap-8 flex-col md:flex-row">
+
+                        <!-- assigned taskes  -->
+
+                        <div class="md:w-96 w-full rounded-lg h-48 bg-gradient-to-tl from-gray-100 to-gray-300 p-3 flex flex-col justify-between">
+                            {% if user.groups.first.name == "HR Specialist" %}
+                            <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">assignment</span>
+                            {% if all_task.employee.user.username == user.username%}
+                            {% for all_task in pending_tasks %}
+                            {% if forloop.last %}
+                            <p class="text-5xl font-bold">{{ forloop.counter }}</p>
+                        {% endif %}
+                          
+        {% empty %}
+         <p class="text-5xl font-bold">0</p>
+{% endfor %}
+ <div>
+                            <h1 class="text-1xl font-bold">Assigned tasks</h1>  
+                            <p class="text-gray-400 text-sm">No pending tasks.</p>
+                        </div> 
+{% endif %}
+
+{% elif user.groups.first.name == "admin" %}
+<span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">Account_Circle</span>
+<p class="text-5xl font-bold">{{active_user_count}}</p>
+<div>
+    <h1 class="text-1xl font-bold">Users</h1>  
+    <p class="text-gray-400 text-sm">Total No of users.</p>
+</div> 
+{% elif user.groups.first.name == "Branch Manager" %}
+<span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">account_tree</span>
+<p class="text-5xl font-bold">{{total_branch}}</p>
+<div>
+    <h1 class="text-1xl font-bold">Branches</h1>  
+    <p class="text-gray-400 text-sm">Total No of Branches.</p>
+    </div>
+
+    {% elif user.groups.first.name != 'admin' and user.groups.first.name != 'Customer Service Representative' and user.groups.first.name != 'Loan Officer' and user.groups.first.name != 'HR Specialist' and user.groups.first.name != 'Branch Manager'%}
+    <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">account_balance_wallet</span>
+    <div class="flex items-end">
+        <p class="text-5xl font-bold">{{Account_amount|floatformat:2}}</p>
+        <p class="text-2xl text-gray-400">birr</p>
+    </div>
+    <div>
+        <h1 class="text-1xl font-bold">Account Balance</h1>  
+        <p class="text-gray-400 text-sm">Total Amount.</p>
+        </div>
+        {% elif user.groups.first.name == "Customer Service Representative" %}
+        <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">Manage_Accounts</span>
+            <p class="text-5xl font-bold">{{total_account}}</p>
+        <div>
+            <h1 class="text-1xl font-bold">Total No Account</h1>  
+            <p class="text-gray-400 text-sm">Total Accounts.</p>
+            </div>
+{% endif %}
+
+                        </div>
+
+                        <!-- completed taskes  -->
+
+                        <div class="md:w-96 w-full rounded-lg h-48 bg-gradient-to-tl from-gray-100 to-gray-300 p-3 flex flex-col justify-between">
+                            {% if user.groups.first.name == "HR Specialist" %}
+                            
+                            <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">task_alt</span>
+                            {% if all_task.employee.user.username == user.username%}
+                            {% for all_task in completed_tasks %}
+                            {% if forloop.last %}
+                            <p class="text-5xl font-bold">{{ forloop.counter }}</p>
+                        {% endif %}
+                {% endfor %}
+                {% endif %}
+                <div>
+                    <h1 class="text-1xl font-bold">Completed tasks</h1>
+                    <p class="text-gray-400 text-sm">There is no notification yet...</p>
+                </div>
+
+                {% elif user.groups.first.name == "admin" %}
+                <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">Person_Add</span>
+                <p class="text-5xl font-bold"><span id="active-users-count">0</span></p>
+                <div>
+                    <h1 class="text-1xl font-bold">Active Users</h1>
+                    <p class="text-gray-400 text-sm">No of active users</p>
+                </div>
+                {% elif user.groups.first.name == "Branch Manager" %}
+                <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">Person_Apron</span>
+                <p class="text-5xl font-bold">{{total_employees}}</p>
+                <div>
+                    <h1 class="text-1xl font-bold">Employees</h1>
+                    <p class="text-gray-400 text-sm">Total No of Employees</p>
+                </div>
+
+                {% elif user.groups.first.name != 'admin' and user.groups.first.name != 'Customer Service Representative' and user.groups.first.name != 'Loan Officer' and user.groups.first.name != 'HR Specialist' and user.groups.first.name != 'Branch Manager'%}
+    <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">Payments</span>
+    <div class="flex items-end">
+        <p class="text-5xl font-bold">{{loan_amount.amount}}</p>
+        <p class="text-2xl text-gray-400">birr</p>
+    </div>
+    <div>
+        <h1 class="text-1xl font-bold">Loan</h1>  
+        <p class="text-gray-400 text-sm">Loann Amount</p>
+        </div>
+
+        {% elif user.groups.first.name == "Customer Service Representative" %}
+        <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">Currency_Exchange</span>
+            <p class="text-5xl font-bold">{{total_trans}}</p>
+        <div>
+            <h1 class="text-1xl font-bold">Total No Transaction</h1>  
+            <p class="text-gray-400 text-sm">Total Transactions.</p>
+            </div>
+                {% endif %}
+                </div>
+
+                        
+
+                        <!-- total taskes  -->
+
+
+                        <div class="md:w-96 w-full rounded-lg h-48 bg-gradient-to-tl from-gray-100 to-gray-300 p-3 flex flex-col justify-between">
+                            <span  class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">
+                            notifications
+                            </span>
+                            <div id="notification-count" class="text-5xl font-bold" >0</div>
+                            <div>
+                                <h1 class="text-1xl font-bold">Notification</h1>
+                            <p class="text-gray-400 text-sm">There is no notification yet...</p>
+                            </div>
+                            
+                        </div>
+
+
+                    </div>
+                    
+                </div>
+
+                <!-- table  -->
+
+                <div class=" flex flex-wrap-reverse lg:flex-row lg:flex-nowrap justify-between ">
+                  <!-- tables  -->
+                   <div class="w-full lg:w-[70%]">
+                     <!-- user  -->
+                    
+                     {% if request.user.is_superuser %}
+                     <section class="bg-white dark:bg-dark py-10 lg:py-[50px] ">
+                        <div class="items-center flex gap-2 pb-3">
+                            <p class="text-gray-500 text-[13px] ">Users</p>
+                            <span id="user_fil" class="material-symbols-outlined border border-slate-900 rounded-md p-1 cursor-pointer hover:bg-lime-500 duration-100 ease-out" title="Filter">
+                                Filter_Alt
+                                </span>
+                        </div>
+                         
+                                  <div class="max-w-full overflow-x-auto">
+                                     <table class="w-full table-auto">
+                                        <thead>
+                                           <tr class="text-center bg-slate-900">
+                                              <th class="my-custom-style ">User</th>
+                                              <th class="my-custom-style ">Email</th>
+                                              <th class="my-custom-style ">Date joined</th>
+                                              <th class="my-custom-style ">Last login</th>
+                                              <th class="my-custom-style ">Groups</th>
+                                              <th class="my-custom-style ">Remove</th>
+                                           </tr>
+                                        </thead>
+                                        <tbody>
+                                         
+                                         {% for user in user_filter.qs %}
+                                           <tr>
+                                              <td class="my-layout-style">{{ user.username }}</td>
+                                              <td class="my-layout-style">{{ user.email }}</td>
+                                              <td class="my-layout-style">{{ user.date_joined }}</td>
+                                              <td class="my-layout-style">{{ user.last_login }}</td>
+                                              <td class="my-layout-style">{% if user.groups.all %}
+                                                
+                                                    {% for group in user.groups.all %}
+                                                        {{ group.name }},
+                                                    {% endfor %}
+                                                
+                                            {% else %}
+                                                No groups
+                                            {% endif %}</td>
+                                            <td class="my-layout-style"><form action="{% url 'delete_user' user.id %}" method="POST" class="inline-block">
+                                                {% csrf_token %}
+                                                <button type="submit" class="p-2 rounded-md bg-red-500 text-white border-red-600 shadow-md border-2">
+                                                    Delete
+                                                </button>
+                                            </form></td>
+                                           </tr>
+                                         {% endfor %}
+                                        
+                                        </tbody>
+                                     </table>
+                                  </div>
+                      </section>
+                      {% endif %}
+ 
+                      <!-- task -->
+ 
+                      {% if request.user.is_superuser %}
+                     <section class="bg-white dark:bg-dark py-10 lg:py-[50px]">
+<div class="items-center flex gap-2 pb-3">
+                         <p class="text-gray-500 text-[13px] pb-3">Task table</p>
+                         <span id="task_fil" class="material-symbols-outlined border border-slate-900 rounded-md p-1 cursor-pointer hover:bg-lime-500  duration-100 ease-out" title="Filter">
+                                Filter_Alt
+                                </span>
+                        </div>
+                         <div class="w-full mx-auto">
+                            <div class="flex flex-wrap ">
+                               <div class="w-full ">
+                                  <div class="max-w-full overflow-x-auto">
+                                     <table class="w-full table-auto">
+                                        <thead>
+                                           <tr class="text-center bg-slate-900">
+                                              <th class="my-custom-style ">Task_id</th>
+                                              <th class="my-custom-style ">Task_type</th>
+                                              <th class="my-custom-style ">Description</th>
+                                              <th class="my-custom-style ">Status</th>
+                                              <th class="my-custom-style ">Due_date</th>
+                                           </tr>
+                                        </thead>
+                                        <tbody>
+                                         
+                                         {% for temp_employee in task_filter.qs %}
+                                           <tr>
+                                              <td class="my-layout-style">{{ temp_employee.task_id }}</td>
+                                              <td class="my-layout-style">{{ temp_employee.task_type }}</td>
+                                              <td class="my-layout-style">{{ temp_employee.description }}</td>
+                                              <td class="my-layout-style">{{ temp_employee.status }}</td>
+                                              <td class="my-layout-style">{{ temp_employee.due_date }}</td>
+                                           </tr>
+                                         {% endfor %}
+                                      
+                                        </tbody>
+                                     </table>
+                                  </div>
+                               </div>
+                            </div>
+                         </div>
+                      </section>
+                      {% endif %}
+
+ 
+                      <!-- task assign  -->
+
+                      {% if request.user.is_superuser %}
+                     <section class="bg-white dark:bg-dark py-10 lg:pb-[50px]">
+<div class="items-center flex gap-2 pb-3">
+                         <p class="text-gray-500 text-[13px] pb-3">Task-Assignment table</p>
+                         <span id="task_as_fi" class="material-symbols-outlined border border-slate-900 rounded-md p-1 cursor-pointer hover:bg-lime-500 duration-100 ease-out" title="Filter">
+                                Filter_Alt
+                                </span>
+                        </div>
+                         <div class="w-full mx-auto">
+                            <div class="flex flex-wrap ">
+                               <div class="w-full ">
+                                  <div class="max-w-full overflow-x-auto">
+                                     <table class="w-full table-auto">
+                                         <thead>
+                                             <tr class="text-center bg-slate-900">
+                                                 <th class="my-custom-style">task_assignment_id</th>
+                                                 <th class="my-custom-style">task</th>
+                                                 <th class="my-custom-style">employee</th>
+                                                 <th class="my-custom-style">assigned_date</th>
+                                             </tr>
+                                         </thead>
+                                         <tbody>
+                                             {% if all_task.employee.user.username == user.username or request.user.is_superuser%}
+                                             {% for temp_employee in task_assignment_filter.qs %}
+                                             <tr>
+                                                 <td class="my-layout-style">{{ temp_employee.task_assignment_id }}</td>
+                                                 <td class="my-layout-style">{{ temp_employee.task }}</td>
+                                                 <td class="my-layout-style">{{ temp_employee.employee }}</td>
+                                                 <td class="my-layout-style">{{ temp_employee.assigned_date }}</td>
+                                             </tr>
+                                             {% endfor %}
+                                             {% endif %}
+                                         </tbody>
+                                     </table>
+                                  </div>
+                               </div>
+                            </div>
+                         </div>
+                      </section>
+                      {% endif %}
+
+<!-- Group  -->
+                     
+{% if request.user.is_superuser %}
+<section class="bg-white dark:bg-dark py-10 lg:py-[50px]">
+    <p class="text-gray-500 text-[13px] pb-3">Groups</p>
+    
+             <div class="max-w-full  overflow-x-auto">
+                <table class="w-full table-auto">
+                   <thead>
+                      <tr class="text-center bg-slate-900">
+                         <th class="my-custom-style ">Name</th>
+                         <th class="my-custom-style ">Number of users</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                    
+                    {% for group, count in group.items %}
+                      <tr>
+                         <td class="my-layout-style">{{ group.name }}</td>
+                         <td class="my-layout-style">{{ count }}</td>
+                      </tr>
+                    {% endfor %}
+                   
+                   </tbody>
+                </table>
+             </div>
+ </section>
+ {% endif %}
+
+                   </div>
+                   <!-- search bar  -->
+                   {% if request.user.is_superuser %}
+                  <div class="w-full lg:w-[30%] pt-20 lg:sticky lg:top-0 h-fit flex items-center justify-center ">
+
+                    <div class="w-[90%] bg-gray-200 max-h-[30rem] h-fit overflow-y-auto rounded-lg shadow-lg p-2 ">
+                        <h1 class="font-bold ">Filter</h1>
+                        <form method="get" class="flex flex-col gap-4">
+                            {% if perms.polls.view_User %}
+                            <div id="user_filter" class="flex flex-col gap-4 hidden">
+                                <p class="text-gray-400 text-sm">User Filter</p>
+                                {{ user_filter.form.as_p }}
+                            </div> 
+                            {% endif %}
+                            {% if perms.polls.view_taskassignment %}
+                            <div id="task_assignment_filter" class="flex flex-col gap-4 hidden">
+                                <p class="text-gray-400 text-sm">Taskassignment filter</p>
+                            {{task_assignment_filter.form.as_p}}
+                        </div>
+                            {% endif %}
+                            {% if perms.polls.view_taskassignment %}
+                            <div id="task_filter" class="flex flex-col gap-4 hidden">
+                                <p class="text-gray-400 text-sm">Task filter</p>
+                            {{task_filter.form.as_p}}
+                        </div>
+                        {% endif %}
+                            <button id="ser" type="submit" class="w-full h-10 bg-lime-500 shadow-md rounded-md flex items-center justify-center gap-2 border-none " >
+                                <span class="material-symbols-outlined text-slate-800">filter_alt</span>
+                                <h1 class="font-bold text-white">Applay</h1>
+                            </button>
+                        </form>
+                        
+                    </div>
+                  </div>
+                   {% endif %}
+
+                </div>
+
+                {% if user.groups.first.name == 'HR Specialist' or user.groups.first.name == 'Branch Manager' %}
+                <div class="py-5 w-full">
+                <p class="text-gray-500 text-[13px] pt-5 pb-1">Employee chart</p>
+                <div class="w-full  p-2 bg-gray-300 rounded-md ">
+                    <div class="flex justify-between gap-2 flex-col lg:flex-row w-full">
+                    <div class="bg-white p-2 rounded-md w-full lg:w-[25%] ">
+                        <p class="font-bold text-[13px] border-b">Total Numbers</p>
+                        <div class="py-3 w-full border-b ">
+                            <p class="font-bold text-gray-500 text-[13px]">Total Employees</p>
+                            <h1 class="text-4xl font-bold text-lime-500">{{total_employees}}</h1>
+                        </div>
+                        <div class="py-3 w-full border-b ">
+                            <p class="font-bold text-gray-500 text-[13px] ">Total Positions</p>
+                            <h1 class="text-4xl font-bold text-lime-500 ">{{total_position_emp}}</h1>
+                        </div>
+                        <div class="py-3 w-full border-b ">
+                            <p class="font-bold text-gray-500 text-[13px] ">Total Departments</p>
+                            <h1 class="text-4xl font-bold text-lime-500 ">{{total_department_emp}}</h1>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 rounded-md w-full lg:w-[45%] flex flex-col items-center">
+                        <div class="w-full border-b">
+                            <p class="font-bold text-[13px] ">Positions</p>
+                        </div>
+                        <div class="h-64">   
+                            <canvas id="positionPieChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 rounded-md w-full lg:w-[45%] flex flex-col items-center">
+                        <div class="w-full border-b">
+                            <p class="font-bold text-[13px] ">Department</p>
+                        </div>
+                        <div class="h-64">   
+                            <canvas id="departPaichart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full">
+                    <canvas id="hireLineChart"></canvas>
+                </div>
+                </div>
+
+                {% if user.groups.first.name == 'Branch Manager' %}
+                <p class="text-gray-500 text-[13px] pt-5 pb-1">Branch chart</p>
+                <div class="w-full  p-2 bg-gray-300 rounded-md ">
+                    <div class="flex justify-between gap-2 flex-col lg:flex-row w-full">
+                        <div class="bg-white p-2 rounded-md w-full lg:w-[50%] h-fit">
+                            <p class="font-bold text-[13px] border-b">Total Numbers</p>
+                            <div class="py-3 w-full border-b ">
+                                <p class="font-bold text-gray-400 text-3xl">Total Branch</p>
+                                <h1 class="text-6xl font-bold text-lime-500">{{total_branch}}</h1>
+                            </div>
+                        </div>
+                        <div class="bg-white p-2 rounded-md w-full lg:w-[50%] flex flex-col items-center">
+                            <div class="w-full border-b">
+                                <p class="font-bold text-[13px] ">Number of employee</p>
+                            </div>
+                            <div class="h-64">   
+                                <canvas id="branchPieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                {% endif %}
+
+                </div>
+                {% endif %}
+
+                {% if user.groups.first.name != 'admin' and user.groups.first.name != 'Customer Service Representative' and user.groups.first.name != 'Loan Officer' and user.groups.first.name != 'HR Specialist' and user.groups.first.name != 'Branch Manager'%}
+                <div class="w-full pb-5">
+                    <p class="text-gray-500 text-[13px] pt-5 pb-1">Account chart</p>
+                <div class="w-full  p-2 bg-gray-300 rounded-md ">
+                    <div class="flex justify-between gap-2 flex-col lg:flex-row w-full">
+                        <div class="bg-white p-2 rounded-md w-full lg:w-[50%] ">
+                            <p class="font-bold text-[13px] border-b">Total Numbers</p>
+                            <div class="py-3 w-full border-b ">
+                                <p class="font-bold text-gray-500 text-[13px]">Total Balance</p>
+                                <h1 class="text-4xl font-bold text-lime-500">{{Account_amount}}</h1>
+                            </div>
+                            <div class="py-3 w-full border-b ">
+                                <p class="font-bold text-gray-500 text-[13px] ">Total Transaction</p>
+                                <h1 class="text-4xl font-bold text-lime-500 ">{{total_transactions}}</h1>
+                            </div>
+                            <div class="py-3 w-full border-b ">
+                                <p class="font-bold text-gray-500 text-[13px] ">Total Loan</p>
+                                <h1 class="text-4xl font-bold text-lime-500 ">{{loan_amount}}</h1>
+                            </div>
+                        </div>
+                        <div class="bg-white p-2 rounded-md w-full lg:w-[50%] flex flex-col items-center">
+                            <div class="w-full border-b">
+                                <p class="font-bold text-[13px] ">Number of employee</p>
+                            </div>
+                            
+                            <div class="h-64">   
+                                <canvas id="positionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if user.groups.first.name == 'Customer Service Representative' %}
+
+                <div class="w-full pb-5">
+                    <p class="text-gray-500 text-[13px] pt-5 pb-1">Account chart</p>
+                <div class="w-full  p-2 bg-gray-300 rounded-md ">
+                    <div class="flex justify-between gap-2 flex-col lg:flex-row w-full">
+                        <div class="bg-white p-2 rounded-md w-full lg:w-[50%] ">
+                            <p class="font-bold text-[13px] border-b">Account Types</p>
+                            <div class="py-3 w-full border-b ">
+                                <p class="font-bold text-gray-500 text-[13px]">Total SavingAccount</p>
+                                <h1 class="text-4xl font-bold text-lime-500">{{total_fixed}}</h1>
+                            </div>
+                            <div class="py-3 w-full border-b ">
+                                <p class="font-bold text-gray-500 text-[13px] ">Total FixedAccount</p>
+                                <h1 class="text-4xl font-bold text-lime-500 ">{{total_saving}}</h1>
+                            </div>
+                            <div class="py-3 w-full border-b ">
+                                <p class="font-bold text-gray-500 text-[13px] ">Total CheckingAccount</p>
+                                <h1 class="text-4xl font-bold text-lime-500 ">{{total_cheking}}</h1>
+                            </div>
+                        </div>
+                        <div class="bg-white p-2 rounded-md w-full lg:w-[50%] flex flex-col items-center">
+                            <div class="w-full border-b">
+                                <p class="font-bold text-[13px] ">Number of employee</p>
+                            </div>
+                            
+                            <div class="h-64">   
+                                <canvas id="account_man"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+                {% if user.groups.first.name == 'admin' %}
+                <div class="py-5">
+                    <canvas id="myChart"></canvas>
+                  </div>
+                  {% endif %}
+                  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                  
+                  <script>
+                    const datesi = {{ dates|safe }};
+                    const countsi = {{ counts|safe }};
+                    const ctx = document.getElementById('myChart');
+                  
+                    new Chart(ctx, {
+                      type: 'bar',
+                      data: {
+                        labels: datesi,
+                        datasets: [{
+                          label: 'Active users',
+                          data: countsi,
+                    borderWidth: 1
+                        }]
+                      },
+                      options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Users'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    }
+                }
+            }
+                    });
+
+                    
+   
+                  </script>
+                   <script>
+                    const pos = document.getElementById('positionPieChart').getContext('2d');
+                    var positionPieChart = new Chart(pos, {
+                        type: 'doughnut',
+                        data: {
+                            labels: {{ positions|safe }},  // Insert positions here
+                            datasets: [{
+                                label: '# of Employees',
+                                data: {{ employee_counts|safe }},  // Insert employee counts here
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                        }
+                    });
+                </script>
+
+                   <script>
+                    const dep = document.getElementById('departPaichart').getContext('2d');
+                    var positionPieChart = new Chart(dep, {
+                        type: 'doughnut',
+                        data: {
+                            labels: {{ department|safe }},  // Insert positions here
+                            datasets: [{
+                                label: '# of Employees',
+                                data: {{ employee_department_counts|safe }},  // Insert employee counts here
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                        }
+                    });
+                </script>
+
+<script>
+    var temp_dis = document.getElementById('hireLineChart').getContext('2d');
+    var hireDates = {{ hire_dates|safe }};
+    var hireCounts = {{ hire_counts|safe }};
+
+    var hireLineChart = new Chart(temp_dis, {
+        type: 'line',
+        data: {
+            labels: hireDates,  // Dates of hire
+            datasets: [{
+                label: 'Number of Temp Employees Hired',
+                data: hireCounts,  // Count of employees hired on each date
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 2,
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Hire Date'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Employees'
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    var branch_emp = document.getElementById('branchPieChart').getContext('2d');
+    var branchNames = {{ branch_names|safe }};
+    var employeeCounts = {{ employee_counts|safe }};
+
+    var branchPieChart = new Chart(branch_emp, {
+        type: 'doughnut',
+        data: {
+            labels: branchNames,  // Branch names
+            datasets: [{
+                label: 'Number of Employees per Branch',
+                data: employeeCounts,  // Employee count for each branch
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Number of Employees in Each Branch'
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    const positionCtx = document.getElementById('positionChart').getContext('2d');
+ 
+    new Chart(positionCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ label|safe }},
+            datasets: [{
+                label: 'Account Balances',
+                data: {{ data|safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+ 
+ </script>
+
+<script>
+    const account_man = document.getElementById('account_man');
+
+    new Chart(account_man, {
+        type: 'doughnut',
+        data: {
+            labels: {{ account_labels|safe }},
+            datasets: [{
+                label: 'Employee Positions',
+                data: {{ account_data|safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+</script>
+
+
+                {% endblock %}
+               
+            </div>
+
+
+
+
+<!-- footer section  -->
+
+
+            
+<div id="footer_cont" class="mt-auto w-full h-6 bg-gray-200  inset-0 bottom-0 flex-col flex justify-between absolute ease-in-out duration-100 z-50 shadow-2xl">
+    <div class="w-full flex justify-center border-t border-slate-400">
+        <span id="fotter_toggler" class="material-symbols-outlined cursor-pointer bg-lime-500 px-2 text-slate-900  shadow-lg">
+            keyboard_arrow_up
+        </span>
+    </div>
+    <div id="footer_li" class="w-full flex  overflow-y-auto flex-wrap items-center h-auto hidden">
+        <div class="md:w-[50%] w-full flex justify-center flex-col items-center">
+            <a class="flex w-full pt-3 pb-3 items-center flex-col" href="{% url '' %}">
+                <img src="../../media/logo-removebg-preview.png" class="w-12 min-w-8 h-auto" alt="Logo">
+            <h1 class="font-bold text-sm">SIKET BANK</h1>
+        </a>
+            <div class="flex  w-[40%] justify-around pt-2 border justify-center items-center">
+                 <a href="" class="rounded-full border-4 border-[#1dc26f] w-8 h-8 p-4 text-lg text-white bg-slate-900 flex items-center justify-center">
+        <i class="fa-brands fa-facebook "></i>
+    </a>
+    <a href="" class="rounded-full border-4 border-[#1dc26f] w-8 h-8 p-4 text-lg text-white bg-slate-900 flex items-center justify-center">
+        <i class="fa-brands fa-twitter "></i>
+    </a>
+    <a href="" class="rounded-full border-4 border-[#1dc26f] w-8 h-8 p-4 text-lg text-white bg-slate-900 flex items-center justify-center">
+        <i class="fa-brands fa-linkedin "></i>
+    </a>
+                
+            </div>
+            
+        </div>
+        <div class="flex md:w-[50%] w-full justify-around flex-wrap py-3  px-2">
+            <div class="space-y-1 flex flex-col border-l-2 border-[#1dc26f] pl-5">
+                <h1 class="font-bold text-xl text-slate-900 bg-white rounded-md px-9">Company</h1>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">About Us</a>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">Product & Services</a>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">Media</a>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">Vacancy</a>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">Contact Us</a>
+            </div>
+            <div class="space-y-1 flex flex-col border-l-2 border-[#1dc26f] pl-5">
+                <h1 class="font-bold text-xl text-slate-900 bg-white rounded-md px-9">Other</h1>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">Exchange Rate</a>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">Loan Calculator</a>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">Branches</a>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">ATM</a>
+                <a href="#" class="text-sm hover:text-lime-500 duration-100 ease-in-out text-gray-500">FAQ</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full border-t flex justify-center ">
+        <p class="text-sm text-gray-400 w-[90%] border-t border-slate-500 flex justify-center py-1 cursor-pointer">© 2024 SIKET BANK</p>
+    </div>
+</div>
+
+
+        </div>
+
+
+        <!-- {% for log in log_entries %}
+    <p>{{ log.action_time }} - {{ log.user }} - {{ log.get_action_flag_display }} - {{ log.object_repr }}</p>
+{% endfor %}
+    
+
+   <h1 class="text-3xl font-mono p-10">{{books.title}}f</h1>  -->
+    </div>
+    
+    <script>
+        function toggle() {
+    const toggleIcon = document.getElementById('toggleIcon');
+
+        if (toggleIcon.textContent.trim() === 'dock_to_right') {
+            toggleIcon.textContent = 'arrow_left_alt';
+        } else {
+            toggleIcon.textContent = 'dock_to_right';
+        }
+    };
+
+    let stat = false;
+    const sidb = document.getElementById('sid-bar')
+    const navm = document.getElementById('nav-manu')
+    
+
+    function simu() {
+        sidb.querySelectorAll('h1').forEach(function(item) {
+                item.classList.toggle('hidden')
+            })
+        
+        sidb.querySelectorAll('span').forEach(function(span) {
+    if (span.textContent.trim() === 'keyboard_arrow_down') {
+        span.classList.toggle('hidden')
+    }
+});
+
+    }
+
+    document.getElementById('toggleIcon').addEventListener('click', () => {
+        if(stat == false) {
+            
+            sidb.style.width = "5%";
+        navm.style.width = "95%";
+        stat = true
+        simu();
+        } else {
+            
+            sidb.style.width = "";
+        navm.style.width = "";
+        stat = false
+         simu();
+        }
+        
+    })
+    
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+        const dropdowns = document.querySelectorAll('#drop');
+        const dropdownContents = document.querySelectorAll('#dropdown-content');
+
+        dropdowns.forEach(function(toggle, index) {
+            const content = dropdownContents[index];
+            
+            if (toggle.contains(event.target)) {
+                // Toggle visibility of the associated dropdown content
+                content.classList.toggle('hidden');
+            } else {
+                // Hide the dropdown content if the click is outside
+                content.classList.add('hidden');
+            }
+        });
+    });
+});
+
+
+
+
+
+    </script>
+  
+    <script>
+          const user_fil = document.getElementById('user_fil')
+    const task_fil = document.getElementById('task_fil')
+    const task_as_fi = document.getElementById('task_as_fi')
+
+    const user_filter = document.getElementById('user_filter')
+    const task_assignment_filter = document.getElementById('task_assignment_filter')
+    const task_filter = document.getElementById('task_filter')
+
+    user_fil.addEventListener('click', function(event) {
+    event.stopPropagation();  // Prevent click from propagating to the document listener
+    user_filter.classList.toggle('hidden');  // Toggle current filter
+
+    // Hide other filters
+    task_filter.classList.add('hidden');
+    task_assignment_filter.classList.add('hidden');
+});
+
+// Toggle `task_filter` when `task_fil` is clicked and hide others
+task_fil.addEventListener('click', function(event) {
+    event.stopPropagation();  // Prevent click from propagating to the document listener
+    task_filter.classList.toggle('hidden');  // Toggle current filter
+
+    // Hide other filters
+    user_filter.classList.add('hidden');
+    task_assignment_filter.classList.add('hidden');
+});
+
+// Toggle `task_assignment_filter` when `task_as_fi` is clicked and hide others
+task_as_fi.addEventListener('click', function(event) {
+    event.stopPropagation();  // Prevent click from propagating to the document listener
+    task_assignment_filter.classList.toggle('hidden');  // Toggle current filter
+
+    // Hide other filters
+    user_filter.classList.add('hidden');
+    task_filter.classList.add('hidden');
+});
+    </script>
+
+
+{% block scripts %}
+
+{% endblock %}
+<script>
+    let count = 0;
+    // Assuming you've already set up Django Channels with WebSocket handling
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/'  // Your WebSocket path for notifications
+        + '{{ request.user.username }}'  // You can pass the user's username or any other identifier
+        + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        count++;
+        // Update the notification count when a new message is received
+        document.querySelector('#notification-count').textContent = count;
+    };
+
+    document.querySelector('#room-name-submit').onclick = function(e) {
+        window.location.pathname = '/send_notification/' + '{{ request.user.username }}' + '/';
+    };
+
+    const sid_bar_togle = document.getElementById('sid-bar-togle')
+    const sid_bar = document.getElementById('sid-bar')
+    const nav_manu = document.getElementById('nav-manu')
+
+
+    function toggleSidebar() {
+        sid_bar.classList.toggle('hidden')
+        sid_bar.classList.toggle('w-[100%]')
+        nav_manu.classList.toggle('hidden')
+    }
+
+
+    // user pro toggle 
+
+   
+    const user_pro_view = document.getElementById('user_pro_view')
+
+    function user_pro() {
+        user_pro_view.classList.toggle('hidden')
+    }
+
+
+
+    // footer toggle 
+
+
+    const footer_cont = document.getElementById('footer_cont');
+const footer_li = document.getElementById('footer_li');
+const footer_toggler = document.getElementById('fotter_toggler'); 
+
+
+    footer_toggler.addEventListener("click", (event) => {
+    if (footer_toggler.textContent.trim() === 'keyboard_arrow_up') {
+        footer_cont.classList.add('h-60');
+        footer_cont.classList.remove('h-6');
+        footer_li.classList.remove('hidden');  // Properly hide the list
+        footer_toggler.textContent = 'keyboard_arrow_down';
+    } else if (footer_toggler.textContent.trim() === 'keyboard_arrow_down') {
+        footer_toggler.textContent = 'keyboard_arrow_up';
+        footer_cont.classList.add('h-6');
+        footer_cont.classList.remove('h-60');
+        footer_li.classList.add('hidden');  // Show the list
+    }
+});
+
+
+</script>
+<script>
+    // Function to fetch the number of active sessions
+    function fetchActiveSessions() {
+    fetch('http://127.0.0.1:8000/active-sessions/')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.active_users);  // Check the console to see if the number is returned
+            document.getElementById('active-users-count').textContent = data.active_users;
+        })
+        .catch(error => {
+            console.error('Error fetching active sessions:', error);
+        });
+}
+
+fetchActiveSessions();
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+
+
+<!-- account status  -->
+
+
+<div class="w-full">
+   
+                    <h1 class="text-3xl font-bold pb-3">Account</h1>
+                    <p class="text-gray-500 text-[13px] pb-3">Account status</p>
+                   
+
+                     <div class="flex w-full lg:justify-between flex-col lg:flex-row items-center justify-center">
+
+                        <!-- assigned taskes  -->
+
+                        <div class="lg:w-[50%] w-full rounded-lg max-h-fit min-h-48 bg-gradient-to-tl bg-gray-300 p-3 flex flex-col justify-between">
+                           <div class=" flex gap-2 items-center">
+                              <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">account_balance</span>
+                              <p class="text-1xl font-bold ">Total balance</p>
+                           </div>
+                            
+
+                            <div class="flex pt-5 items-end gap-1">
+                              <p class="text-5xl font-bold ">{{ total_balance|floatformat:2 }}</p>
+                              <p class="text-2xl text-gray-500">birr</p>
+                            </div>
+
+                            <div class="space-y-4 pt-8">
+                              {% for account in account %}
+                            <!-- <p class="text-5xl font-bold">Birr {{account.balance}}</p> -->
+
+                           <div class="bg-white w-full p-2 rounded-md shadow-md flex justify-between items-center">
+                              <div>
+                                 <h1 class="text-1xl font-bold">{{account.balance}}</h1>
+                            <p class="text-gray-400 text-sm">ID: {{account.account_id}}</p>
+                              </div>
+                            
+                              <h1 class="text-1xl font-bold ">{{account.account_type}}</h1>
+                        </div> 
+                        {% endfor %}
+                            </div>
+                            
+
+                        </div>
+
+
+
+
+                        <div class="lg:w-[43%] w-full">
+                        
+                           <canvas id="positionChart" class="w-full h-full"></canvas>
+                       </div>
+
+
+                     </div>
+
+
+
+
+<!-- transaction status  -->
+
+<!-- total transaction  -->
+
+                           
+
+    <h1 class="text-3xl font-bold pb-3 pt-5">Transaction</h1>
+    <p class="text-gray-500 text-[13px] ">Transaction status</p>
+
+
+
+    <div class="flex w-full lg:justify-between flex-col lg:flex-row items-center justify-center py-8">
+
+       
+
+        <div class="w-full rounded-lg max-h-fit min-h-48 bg-gradient-to-tl bg-gray-300 p-3 flex flex-col justify-between">
+           <div class=" flex gap-2 items-center">
+              <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">move_up</span>
+              <p class="text-1xl font-bold ">Total transaction</p>
+           </div>
+            
+
+            <div class="flex pt-5 items-end gap-1">
+              <p class="text-5xl font-bold ">{{ total_transactions }}</p>
+              <p class="text-2xl text-gray-500">birr</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-3 justify-between w-full pt-5">
+              <div class="lg:w-80 w-full rounded-md bg-white min-h-24 max-h-fit p-2">
+                <p class="font-bold text-sm">Total deposit</p>
+                <div class="flex gap-1 items-end">
+                    <p class="font-bold text-5xl pt-1">{{total_deposit}}</p>
+                    <p class="text-2xl text-gray-500">birr</p>
+                </div>
+              </div>
+              <div class="lg:w-80 w-full rounded-md bg-white min-h-24 max-h-fit p-2">
+                <p class="font-bold text-sm">Total withdrawal</p>
+                <div class="flex gap-1 items-end">
+                    <p class="font-bold text-5xl pt-1">{{total_withdrawal}}</p>
+                    <p class="text-2xl text-gray-500">birr</p>
+                </div>
+                
+              </div>
+              <div class="lg:w-80 w-full rounded-md bg-white min-h-24 max-h-fit p-2">
+                <p class="font-bold text-sm">Total transfer</p>
+                <div class="flex gap-1 items-end">
+                    <p class="font-bold text-5xl pt-1">{{total_transfer}}</p>
+                    <p class="text-2xl text-gray-500">birr</p>
+                </div>
+                
+              </div>
+            </div>
+            
+
+        </div>
+
+
+
+
+       
+
+
+     </div>
+
+
+       <!-- transaction type line chart  -->
+
+    <div class="flex w-full justify-between flex-col lg:flex-row md:flex-wrap lg:flex-nowrap items-center pb-5 gap-3">
+
+      <div class="lg:max-w-96 w-full rounded-lg min-h-48 max-h-fit bg-gradient-to-tl bg-gray-100 py-4 flex flex-col justify-between">
+            <h3>Deposits</h3>
+        <canvas id="depositChart" class="w-full h-full"></canvas>
+      </div>
+
+
+      <div class=" lg:max-w-96 w-full rounded-lg min-h-48 max-h-fit bg-gradient-to-tl bg-gray-100 p-3 flex flex-col justify-between">
+         <h3>Withdrawals</h3>
+        <canvas id="withdrawalChart" class="w-full h-full"></canvas>
+      </div>
+
+
+      <div class=" lg:max-w-96 w-full rounded-lg min-h-48 max-h-fit bg-gradient-to-tl bg-gray-100 p-3 flex flex-col justify-between">
+         <h3>Transfers</h3>
+        <canvas id="transferChart" class="w-full h-full"></canvas>
+      </div>
+
+
+    </div>
+
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+   const positionCtx = document.getElementById('positionChart').getContext('2d');
+
+   new Chart(positionCtx, {
+       type: 'doughnut',
+       data: {
+           labels: {{ label|safe }},
+           datasets: [{
+               label: 'Account Balances',
+               data: {{ data|safe }},
+               backgroundColor: [
+                   'rgba(255, 99, 132, 0.2)',
+                   'rgba(54, 162, 235, 0.2)',
+                   'rgba(255, 206, 86, 0.2)',
+                   'rgba(75, 192, 192, 0.2)',
+                   'rgba(153, 102, 255, 0.2)',
+                   'rgba(255, 159, 64, 0.2)'
+               ],
+               borderColor: [
+                   'rgba(255, 99, 132, 1)',
+                   'rgba(54, 162, 235, 1)',
+                   'rgba(255, 206, 86, 1)',
+                   'rgba(75, 192, 192, 1)',
+                   'rgba(153, 102, 255, 1)',
+                   'rgba(255, 159, 64, 1)'
+               ],
+               borderWidth: 1
+           }]
+       }
+   });
+
+</script>
+
+
+
+
+
+<script>
+   const depositCtx = document.getElementById('depositChart').getContext('2d');
+   const withdrawalCtx = document.getElementById('withdrawalChart').getContext('2d');
+   const transferCtx = document.getElementById('transferChart').getContext('2d');
+
+   new Chart(depositCtx, {
+       type: 'line',
+       data: {
+           labels: {{ labels|safe }},
+           datasets: [{
+               label: 'Deposits',
+               data: {{ deposit_data|safe }},
+               borderColor: 'rgba(75, 192, 192, 1)',
+               fill: false
+           }]
+       }
+   });
+
+   new Chart(withdrawalCtx, {
+       type: 'line',
+       data: {
+           labels: {{ labels|safe }},
+           datasets: [{
+               label: 'Withdrawals',
+               data: {{ withdrawal_data|safe }},
+               borderColor: 'rgba(255, 99, 132, 1)',
+               fill: false
+           }]
+       }
+   });
+
+   new Chart(transferCtx, {
+       type: 'line',
+       data: {
+           labels: {{ labels|safe }},
+           datasets: [{
+               label: 'Transfers',
+               data: {{ transfer_data|safe }},
+               borderColor: 'rgba(153, 102, 255, 1)',
+               fill: false
+           }]
+       }
+   });
+</script>
+
+
+
+{% endblock %}

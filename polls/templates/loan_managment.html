@@ -1,0 +1,199 @@
+{% extends 'home.html' %}
+{% block main %}
+<div class="w-full">
+    <div class="flex justify-center md:justify-between items-center w-full overflow-x-auto">
+        <div class="hidden md:block">
+            <h1 class="text-2xl font-bold pb-3">Loan managment</h1>
+<p class="text-gray-500 text-[13px] pb-3">Loan table</p>
+        </div>
+
+        <div class="flex gap-10 items-center  lg:w-[80%] w-full ">
+            
+
+
+            <!-- filter search form  -->
+
+           
+                <form method="GET" action="{% url 'Loan_managment' %}" class="flex-grow flex items-end gap-2 w-full lg:justify-end">
+                    
+                    {{ fil.form.as_p }}
+                    <button id="ser" type="submit" class="w-10 h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                        <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                        
+                    </button>
+                   
+                
+                    
+                </form>
+
+            
+        </div>
+    </div>
+
+
+
+    <div class="w-full flex flex-col  pt-5">
+        <div class="block lg:hidden">
+            <h1 class="text-3xl font-bold pb-3">Loan managment</h1>
+<p class="text-gray-500 text-[13px] pb-3">Loan table</p>
+        </div>
+    <div class="max-w-full overflow-x-auto ">
+    <table class="w-full table-auto overflow-x-auto">
+        <thead>
+           <tr class="text-center bg-slate-900">
+              <th class="emp-custom-style-head">loan_id</th>
+              <th class="emp-custom-style-head">user</th>
+              <th class="emp-custom-style-head">amount</th>
+              <th class="emp-custom-style-head">collateral</th>
+              <th class="emp-custom-style-head">interest_rate</th>
+              <th class="emp-custom-style-head">repayment_schedule</th>
+              <th class="emp-custom-style-head">start_date</th>
+              <th class="emp-custom-style-head">end_date</th>
+              <th class="emp-custom-style-head">status</th>
+           </tr>
+        </thead>
+        <tbody>
+         {% for loan in fil.qs %}
+           <tr>
+              <td class="emp-table-sty">{{loan.loan_id}}</td>
+              <td class="emp-table-sty">{{loan.user}}</td>
+              <td class="emp-table-sty">{{loan.amount}}</td>
+              <td class="emp-table-sty">{{loan.collateral}}</td>
+              <td class="emp-table-sty">{{loan.interest_rate}}</td>
+              <td class="emp-table-sty">{{loan.repayment_schedule}}</td>
+              <td class="emp-table-sty">{{loan.start_date}}</td>
+              <td class="emp-table-sty">{{loan.end_date}}</td>
+              <td class="emp-table-sty">{{loan.status}}</td>
+           </tr>
+         {% endfor %}
+        </tbody>
+     </table>
+     </div>
+    </div>
+
+
+
+    <div class="flex justify-center md:justify-between items-center w-full overflow-x-auto">
+        <div class="hidden md:block lg:w-[35%] ">
+            <h1 class="text-[1.3rem] font-bold pb-3 w-full">Collateral managment</h1>
+<p class="text-gray-500 text-[13px] pb-3">Collateral table</p>
+        </div>
+
+        <div class="flex gap-10 items-center  lg:w-[60%] w-full ">
+            
+
+
+            <!-- filter search form  -->
+
+           
+                <form method="GET" action="{% url 'Loan_managment' %}" class="flex-grow flex items-end gap-2 w-full lg:justify-end">
+                    
+                    {{ filter_col.form.as_p }}
+                    <button id="ser" type="submit" class="w-10 h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                        <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                        
+                    </button>
+                   
+                
+                    
+                </form>
+
+            
+        </div>
+    </div>
+
+
+
+    <div class="w-full flex flex-col  pt-5">
+        <div class="block lg:hidden">
+            <h1 class="text-3xl font-bold pb-3">Collateral managment</h1>
+<p class="text-gray-500 text-[13px] pb-3">Collateral table</p>
+        </div>
+    <div class="max-w-full overflow-x-auto ">
+    <table class="w-full table-auto overflow-x-auto">
+        <thead>
+           <tr class="text-center bg-slate-900">
+              <th class="emp-custom-style-head">collateral_id</th>
+              <th class="emp-custom-style-head">collateral_type</th>
+              <th class="emp-custom-style-head">value</th>
+              <th class="emp-custom-style-head">description</th>
+           </tr>
+        </thead>
+        <tbody>
+         {% for collateral in filter_col.qs %}
+           <tr>
+              <td class="emp-table-sty">{{collateral.collateral_id}}</td>
+              <td class="emp-table-sty">{{collateral.collateral_type}}</td>
+              <td class="emp-table-sty">{{collateral.value}}</td>
+              <td class="emp-table-sty">{{collateral.description}}</td>
+           </tr>
+         {% endfor %}
+        </tbody>
+     </table>
+     </div>
+    </div>
+
+
+
+
+    <div class="flex justify-center md:justify-between items-center w-full overflow-x-auto">
+        <div class="hidden md:block lg:w-[35%] ">
+            <h1 class="text-[1.3rem] font-bold pb-3 w-full">LoanPayment managment</h1>
+<p class="text-gray-500 text-[13px] pb-3">LoanPayment table</p>
+        </div>
+
+        <div class="flex gap-10 items-center  lg:w-[60%] w-full ">
+            
+
+
+            <!-- filter search form  -->
+
+           
+                <form method="GET" action="{% url 'Loan_managment' %}" class="flex-grow flex items-end gap-2 w-full lg:justify-end">
+                    
+                    {{ filter_payment.form.as_p }}
+                    <button id="ser" type="submit" class="w-10 h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                        <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                        
+                    </button>
+                   
+                
+                    
+                </form>
+
+            
+        </div>
+    </div>
+
+
+
+    <div class="w-full flex flex-col  pt-5">
+        <div class="block lg:hidden">
+            <h1 class="text-3xl font-bold pb-3">LoanPayment managment</h1>
+<p class="text-gray-500 text-[13px] pb-3">LoanPayment table</p>
+        </div>
+    <div class="max-w-full overflow-x-auto ">
+    <table class="w-full table-auto overflow-x-auto">
+        <thead>
+           <tr class="text-center bg-slate-900">
+              <th class="emp-custom-style-head">loan</th>
+              <th class="emp-custom-style-head">payment_date</th>
+              <th class="emp-custom-style-head">amount_paid</th>
+              <th class="emp-custom-style-head">status</th>
+           </tr>
+        </thead>
+        <tbody>
+         {% for payment in filter_payment.qs %}
+           <tr>
+              <td class="emp-table-sty">{{payment.loan}}</td>
+              <td class="emp-table-sty">{{payment.payment_date}}</td>
+              <td class="emp-table-sty">{{payment.amount_paid}}</td>
+              <td class="emp-table-sty">{{payment.status}}</td>
+           </tr>
+         {% endfor %}
+        </tbody>
+     </table>
+     </div>
+    </div>
+</div>
+{% endblock %}

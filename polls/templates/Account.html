@@ -1,0 +1,255 @@
+
+{% extends 'home.html' %}
+{% block main %}
+<div class="w-full">
+    <div class="flex lg:justify-between justify-center items-center w-full">
+        <div class="hidden lg:block">
+            <h1 class="text-2xl font-bold pb-3">Account Management</h1>
+<p class="text-gray-500 text-[13px] pb-3">Account table</p>
+        </div>
+
+        <div class="flex  items-end  w-fit">
+                
+
+
+            <!-- filter search form  -->
+
+            
+                <form method="GET" action="{% url 'Account_view' %}" class="flex-grow flex items-end  gap-2 lg:gap-3 justify-end w-fit ">
+                   
+                
+                    {{ filter.form.as_p }}
+                    <button id="ser" type="submit" class="w-10 h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                        <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                        
+                    </button>
+                
+                    
+                </form>
+                
+            
+
+        </div>
+        
+        
+    </div>
+
+
+        
+     
+    <div class="w-full flex flex-col  pt-10">
+        <div class="block lg:hidden">
+            <h1 class="text-2xl font-bold pb-3">Account Management</h1>
+<p class="text-gray-500 text-[13px] pb-3">Employee table</p>
+        </div>
+    <div class="max-w-full overflow-x-auto ">
+    <table class="w-full table-auto overflow-x-auto">
+        <thead>
+           <tr class="text-center bg-slate-900">
+              <th class="emp-custom-style-head">Account id</th>
+              <th class="emp-custom-style-head">User</th>
+              <th class="emp-custom-style-head">Account type</th>
+              <th class="emp-custom-style-head">Balance</th>
+              <th class="emp-custom-style-head">Created at</th>
+           </tr>
+        </thead>
+        <tbody>
+         {% for account in filter.qs %}
+           <tr>
+              <td class="emp-table-sty">{{account.account_id}}</td>
+              <td class="emp-table-sty">{{account.user}}</td>
+              <td class="emp-table-sty">{{account.account_type}}</td>
+              <td class="emp-table-sty">{{account.balance}}</td>
+              <td class="emp-table-sty">{{account.created_at}}</td>
+             
+           </tr>
+         {% endfor %}
+        </tbody>
+     </table>
+     </div>
+    </div>
+
+
+    <div class="flex lg:justify-between justify-center flex-col lg:flex-row items-center gap-5 pt-10 w-full">
+
+        <div class="w-full lg:w-[80%] mt-8 overflow-x-auto">
+            <p class="text-gray-500 text-[13px] pb-3">Types Account</p>
+            <table class="w-full table-auto overflow-x-auto">
+                <thead>
+                   <tr class="text-center bg-slate-900">
+                      <th class="emp-custom-style-head">Account Type</th>
+                      <th class="emp-custom-style-head">Number of Users</th>
+                   </tr>
+                </thead>
+                <tbody>
+                 {% for label, count in account_type_counts %}
+                   <tr>
+                      <td class="emp-table-sty">{{ label }}</td>
+                      <td class="emp-table-sty">{{ count }}</td>
+                   </tr>
+                 {% endfor %}
+                </tbody>
+             </table>
+        </div>
+
+        <div class="lg:w-1/3 w-[100%]">
+            <canvas id="positionChart" class="w-full h-full"></canvas>
+        </div>
+    </div>
+
+
+
+    <div class="flex lg:justify-between justify-center items-center w-full pt-5">
+        <div class="hidden lg:block">
+            <h1 class="text-2xl font-bold pb-3">Transaction Management</h1>
+<p class="text-gray-500 text-[13px] pb-3">Transaction table</p>
+        </div>
+
+        <div class="flex  items-end  w-fit">
+                
+
+
+            <!-- filter search form  -->
+
+            
+                <form method="GET" action="{% url 'Account_view' %}" class="flex-grow flex items-end  gap-2 lg:gap-3 justify-end w-fit ">
+                   
+                
+                    {{ transaction_filter.form.as_p }}
+                    <button id="ser" type="submit" class="w-10 h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                        <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                        
+                    </button>
+                
+                    
+                </form>
+                
+            
+
+        </div>
+        <!-- Total Transactions: {{ total_transactions }} -->
+    </div>
+
+
+    
+    <div class="w-full flex flex-col  py-10">
+        <div class="block lg:hidden">
+            <h1 class="text-2xl font-bold pb-3">Transaction Management</h1>
+<p class="text-gray-500 text-[13px] pb-3">Transaction table</p>
+        </div>
+    <div class="max-w-full overflow-x-auto ">
+    <table class="w-full table-auto overflow-x-auto">
+        <thead>
+           <tr class="text-center bg-slate-900">
+              <th class="emp-custom-style-head">transaction_id</th>
+              <th class="emp-custom-style-head">to_account</th>
+              <th class="emp-custom-style-head">form_account</th>
+              <th class="emp-custom-style-head">transaction_type</th>
+              <th class="emp-custom-style-head">amount</th>
+              <th class="emp-custom-style-head">date</th>
+              <th class="emp-custom-style-head">description</th>
+           </tr>
+        </thead>
+        <tbody>
+         {% for transaction in transaction_filter.qs %}
+           <tr>
+              <td class="emp-table-sty">{{transaction.transaction_id}}</td>
+              <td class="emp-table-sty">{{transaction.to_account}}</td>
+              <td class="emp-table-sty">{{transaction.form_account}}</td>
+              <td class="emp-table-sty">{{transaction.transaction_type}}</td>
+              <td class="emp-table-sty">{{transaction.amount}}</td>
+              <td class="emp-table-sty">{{transaction.date}}</td>
+              <td class="emp-table-sty">{{transaction.description}}</td>
+             
+           </tr>
+         {% endfor %}
+        </tbody>
+     </table>
+     </div>
+    </div>
+
+
+    <div class="pt-9">
+        <p class="text-gray-500 text-[13px] pb-3">Employee chart</p>
+        <canvas id="myChart"></canvas>
+      </div>
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+    const positionCtx = document.getElementById('positionChart');
+
+    new Chart(positionCtx, {
+        type: 'pie',
+        data: {
+            labels: {{ account_labels|safe }},
+            datasets: [{
+                label: 'Employee Positions',
+                data: {{ account_data|safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+</script>
+
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    // Ensure labels and data are passed as JavaScript arrays
+    const labels = {{ transaction_labels|safe }};
+    const data = {{ transaction_data|safe }};
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Number of Employees',
+                data: data,
+                borderWidth: 1,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Employees'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Positions'
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+                {% endblock %}

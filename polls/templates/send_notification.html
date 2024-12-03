@@ -1,0 +1,275 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+
+<div class=" flex justify-center items-center  w-full h-full -z-[1000]">
+    <div class="relative w-full lg:w-[70%] h-[90%] flex items-center  p-4 md:rounded-r-none md:rounded-l-md rounded-md bg-[#e3e6ee] shadow-lg md:border-r-2 md:border-black" >
+
+        <div class=" md:rounded-tl-md md:rounded-tr-none rounded-t-md text-white absolute top-0 left-0 right-0 w-full bg-[#1dc26f] px-4 h-[3rem] flex items-center z-10  justify-between">
+            <div class="flex items-center gap-1">
+                <div class="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden flex justify-center items-center border-slate-900 border-2">
+                    {% if roo.online and roo.online.userprofile and roo.online.userprofile.profile_image %}
+                    <img src="{{ roo.online.userprofile.profile_image.url }}" class="border-white-500 rounded-full border-2 object-cover w-full h-full" alt="sdc">
+                    {% else %}
+            
+            <span class="material-symbols-outlined text-gray-900 text-[30px] cursor-pointer">account_circle</span>
+        {% endif %}
+                </div>
+                <div>
+                    <h1 class="font-bold">{{ room_name }}</h1>
+                </div>
+            </div>
+            
+            <div onclick="chat_togler()"  class="md:hidden flex gap-1 items-center cursor-pointer">
+                <p class="text-sm font-bold">List of chat rooms</p>
+                <span id="chat_tog" class="material-symbols-outlined text-gray-900 text-[20px] cursor-pointer">keyboard_arrow_down</span>
+            </div>  
+        </div>
+
+        <div id="list_ro" class="absolute w-48 h-72 bg-[#d8dae6] top-14 right-3 z-50 overflow-y-auto shadow-md rounded-md hidden flex flex-col">
+            {% if request.user.is_superuser %}
+        {% for room in room %}
+        <a class="w-full p-2 hover:bg-[#1dc26f] hover:text-white text-black" href="{% url 'send_notification' room.name %}" class="">
+        <div class="flex gap-2 items-center w-full">
+
+            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden flex justify-center items-center border-slate-900 border-2">
+                {% if room.online.userprofile %}
+                <img src="{{ room.online.userprofile.profile_image.url }}" class="border-white-500 rounded-full border-2 object-cover w-full h-full" alt="">
+                {% else %}
+        
+        <span class="material-symbols-outlined text-gray-900 text-[30px] cursor-pointer">account_circle</span>
+    {% endif %}
+            </div>
+            
+            <div class="">
+                <h1 class="font-bold ">{{room.name}}</h1>
+                <p class="text-sm text-gray-600">{{room.online.email}}</p>
+            </div>
+                
+        </div>
+    </a>
+        <hr>
+        {% endfor %}
+        {% else %}
+
+        <a href="{% url 'send_notification' request.user.username %}" class="w-full p-2 hover:bg-lime-600 text-white">
+            <div class="flex gap-2">
+            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden flex justify-center items-center border-lime-500 border-2">
+            {% if room.online.userprofile %}
+                <img src="{{ user.userprofile.profile_image.url }}" class="border-white rounded-full border-2 object-cover w-full h-full" alt="">
+                {% else %}
+        
+        <span class="material-symbols-outlined text-gray-900 text-[30px] cursor-pointer">account_circle</span>
+    {% endif %}
+        </div>
+        <div>
+            <h1 class="font-bold text-black">{{request.user.username}}</h1>
+            <p class="text-sm text-gray-600">{{request.user.email}}</p>
+        </div>
+        </div>
+    </a>
+        {% endif %}
+        </div>
+
+            
+        <div id="chat-log" class="w-full flex flex-col gap-4 overflow-y-auto h-[87%] z-10 ">
+            {% for mess in message %}
+            <div class="flex gap-1  items-start pt-2">
+                {% if mess.user.userprofile.profile_image.url %}
+                <img src="{{ mess.user.userprofile.profile_image.url }}" class="border-slate-900 rounded-full border-2 object-cover w-7 h-7" alt="sdc">
+                {% else %}
+        
+        <span class="material-symbols-outlined text-gray-900 text-[30px] cursor-pointer">account_circle</span>
+    {% endif %}
+                <div class="p-2 h-auto w-fit rounded-r-lg rounded-bl-lg bg-[#1dc26f] shadow-md text-white flex flex-col">
+                    <p class="font-bold">
+                        {{ mess.user }}</p>
+                    <p class=" font-bold text-gray-700 text-sm">
+                        {{ mess.message }}
+                    </p> 
+                    
+                </div>
+                <p class="  text-gray-700 text-[10px]">
+                    {{ mess.date_sent|date:"H:i d F" }}
+                </p> 
+            </div>
+            
+            {% endfor %}
+        </div>
+          
+          
+          {% if request.user.is_superuser %}
+          <div class="flex justify-center items-center w-full h-fit  absolute bottom-0 left-0 pb-1">
+            <div class="w-[95%] rounded-md bg-white flex shadow-lg">
+                <input class="w-[90%] border-none outline-none focus:border-none focus:outline-none focus:ring-0 rounded-l-md" placeholder="Write a Message..." id="chat-message-input" type="text" size="100"><br>
+          
+          
+          <span id="chat-message-submit" class="material-symbols-outlined text-slate-900 text-[40px] cursor-pointer " type="send">
+            send
+            </span>
+            </div>
+            
+          </div>
+          {% endif %}
+          
+          
+    </div>
+
+    <div class="lg:w-[25%] h-[90%] hidden relative lg:flex flex-col  py-1 rounded-r-md bg-[#d8dae6] shadow-lg pt-12 overflow-y-auto">
+        
+        <div class="text-white text-[15px] rounded-tr-md absolute top-0 left-0 right-0 py-1 bg-[#087f43] w-full h-[3rem] px-4 flex justify-between items-end">
+            <div>
+                <h1 class="font-bold text-sm">{{user}}</h1>
+                <p class="text-sm text-gray-200">{{user.email}}</p>
+            </div>
+            <p class="text-sm font-bold">List of chat rooms</p>
+        </div>
+        {% if request.user.is_superuser %}
+        {% for room in room %}
+        <a class="w-full p-2 hover:bg-[#1dc26f] hover:text-white text-black" href="{% url 'send_notification' room.name %}" class="">
+        <div class="flex gap-2 items-center">
+
+            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden flex justify-center items-center border-slate-900 border-2">
+                {% if room.online.userprofile %}
+                <img src="{{ room.online.userprofile.profile_image.url }}" class="border-white-500 rounded-full border-2 object-cover w-full h-full" alt="">
+                {% else %}
+        
+        <span class="material-symbols-outlined text-gray-900 text-[30px] cursor-pointer">account_circle</span>
+    {% endif %}
+            </div>
+            
+            <div class="">
+                <h1 class="font-bold ">{{room.name}}</h1>
+                <p class="text-sm text-gray-600">{{room.online.email}}</p>
+            </div>
+                
+        </div>
+    </a>
+        <hr>
+        {% endfor %}
+        {% else %}
+
+        <a href="{% url 'send_notification' request.user.username %}" class="w-full p-2 hover:bg-lime-600 text-white">
+            <div class="flex gap-2">
+            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden flex justify-center items-center border-lime-500 border-2">
+            {% if room.online.userprofile %}
+                <img src="{{ user.userprofile.profile_image.url }}" class="border-white rounded-full border-2 object-cover w-full h-full" alt="">
+                {% else %}
+        
+        <span class="material-symbols-outlined text-gray-900 text-[30px] cursor-pointer">account_circle</span>
+    {% endif %}
+        </div>
+        <div>
+            <h1 class="font-bold text-black">{{request.user.username}}</h1>
+            <p class="text-sm text-gray-600">{{request.user.email}}</p>
+        </div>
+        </div>
+    </a>
+        {% endif %}
+    </div>
+   
+                      
+</div>
+{{ room_name|json_script:"room-name" }}
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+  const chatSockets = new WebSocket(
+      'ws://'
+      + window.location.host
+      + '/ws/chat/'
+      + roomName
+      + '/'
+  );
+
+  chatSockets.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+
+    // Create the outer container for the new message
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('flex', 'gap-1', 'items-start');
+
+    // Create the user image or icon as a span (material-symbols-outlined)
+    let userIconOrImage;
+    if (data.profileImageUrl) {
+        // Create an image element if profile image URL is available
+        userIconOrImage = document.createElement('img');
+        userIconOrImage.src = data.profileImageUrl;
+        userIconOrImage.classList.add('border-slate-900', 'rounded-full', 'border-2', 'object-cover', 'w-7', 'h-7');
+        userIconOrImage.alt = 'User Profile Image';
+    } else {
+        // Create a span for the account_circle icon if no image is provided
+        userIconOrImage = document.createElement('span');
+        userIconOrImage.classList.add('material-symbols-outlined', 'text-gray-900', 'text-[30px]', 'cursor-pointer');
+        userIconOrImage.textContent = 'account_circle';
+    }
+
+    // Create and style the message content
+    const messageContent = document.createElement('div');
+    messageContent.classList.add('p-2', 'h-auto', 'w-fit', 'rounded-r-lg', 'rounded-bl-lg', 'bg-[#1dc26f]', 'shadow-md', 'text-white', 'flex', 'flex-col');
+
+    // Create and append the user name and message text
+    const userName = document.createElement('p');
+    userName.classList.add('font-bold');
+    userName.textContent = data.username;
+    
+    const messageText = document.createElement('p');
+    messageText.classList.add('font-bold', 'text-gray-700', 'text-sm');
+    messageText.textContent = data.message;
+
+    messageContent.appendChild(userName);
+    messageContent.appendChild(messageText);
+
+    // Create and style the date-time
+    const dateTime = document.createElement('p');
+    dateTime.classList.add('text-gray-700', 'text-[10px]');
+    dateTime.textContent = new Date(data.dateSent).toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'long' });
+
+    // Assemble the complete message container
+    messageContainer.appendChild(userIconOrImage);
+    messageContainer.appendChild(messageContent);
+    messageContainer.appendChild(dateTime);
+
+    // Append the new message to the chat log
+    document.querySelector('#chat-log').appendChild(messageContainer);
+};
+
+
+  chatSockets.onclose = function(e) {
+      console.error('Chat socket closed unexpectedly');
+  };
+
+  document.querySelector('#chat-message-input').focus();
+  document.querySelector('#chat-message-input').onkeyup = function(e) {
+      if (e.key === 'Enter') {  // enter, return
+          document.querySelector('#chat-message-submit').click();
+      }
+  };
+
+  document.querySelector('#chat-message-submit').onclick = function(e) {
+      const messageInputDom = document.querySelector('#chat-message-input');
+      const message = messageInputDom.value;
+      chatSockets.send(JSON.stringify({
+          'message': message,
+          'room': roomName
+      }));
+      messageInputDom.value = '';
+  };
+
+
+  const chat_tog = document.getElementById('chat_tog')
+  const list_ro = document.getElementById('list_ro')
+
+function chat_togler() {
+    list_ro.classList.toggle('hidden')
+    if (chat_tog.innerHTML == "keyboard_arrow_down"){
+        chat_tog.innerHTML = "keyboard_arrow_up"
+    }else {
+        chat_tog.innerHTML = "keyboard_arrow_down"
+    }
+}
+</script>
+{% endblock %}

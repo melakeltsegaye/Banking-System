@@ -1,0 +1,230 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+
+
+    
+    <div class="w-full">
+        <div class="flex justify-center md:justify-between items-center">
+            <div class="hidden md:block">
+                <h1 class="text-3xl font-bold pb-3">Branch</h1>
+    <p class="text-gray-500 text-[13px] pb-3">Branch table</p>
+            </div>
+
+            <div class="flex gap-10 items-center justify-end md:w-[80%] w-full">
+                
+
+
+                <!-- filter search form  -->
+
+                <div>
+                    <form method="GET" action="{% url 'Branchview' %}" class="flex-grow flex items-end gap-2">
+                        
+                        {{ filter.form.as_p }}
+                        <button id="ser" type="submit" class="w-10 h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                            <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                            
+                        </button>
+                       
+                    
+                        
+                    </form>
+                    
+                </div>
+
+                
+            </div>
+            
+            
+            
+        </div>
+        
+        <section class="bg-white dark:bg-dark py-2 lg:py-[40px]">
+            <div class="w-full mx-auto">
+               <div class="flex flex-wrap ">
+                  <div class="w-full flex flex-col">
+                    <div class="block md:hidden">
+                        <h1 class="text-3xl font-bold pb-3">Branch</h1>
+            <p class="text-gray-500 text-[13px] pb-3">Branch table</p>
+                    </div>
+                     <div class="max-w-full overflow-x-auto ">
+                        
+                        
+    <table class="w-full table-auto overflow-x-auto">
+        <thead>
+           <tr class="text-center bg-slate-900">
+              <th class="my-custom-style ">branch_id</th>
+              <th class="my-custom-style ">branch_name</th>
+              <th class="my-custom-style ">location</th>
+              <th class="my-custom-style ">Number of Employees</th>
+              <th class="my-custom-style ">Action</th>
+              <th class="my-custom-style ">Delete</th>
+           </tr>
+        </thead>
+        <tbody>
+         {% for branch in filter.qs%}
+           <tr>
+              <td class="my-layout-style">{{ branch.branch_id }}</td>
+              <td class="my-layout-style">{{ branch.branch_name }}</td>
+              <td class="my-layout-style">{{ branch.location }}</td>
+              <td class="my-layout-style">{{ branch.employee_count }}</td>
+              <td class="my-layout-style"><a href="{% url 'Branch_update' branch.branch_id %}">Change</a></td>
+              <td class="my-layout-style"><a href="{% url 'Branch_remove' branch.branch_id  %}" class="p-2 rounded-md bg-red-500 text-white border-red-600 shadow-md border-2">Delete</a></td>
+           </tr>
+         {% endfor %}
+        </tbody>
+     </table>
+     </div>
+     </div>
+     </div>
+    </section>
+<a href="{% url 'save_pdf_to_local' %}" class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2 "> download</a>
+   
+
+     <!-- employee info view  -->
+     {% if filter.qs.exists %}
+     <div class="flex justify-between w-full  space-x-8 items-center flex-col lg:flex-row">
+         <div class="lg:w-[70%] w-[100%]">
+             <p class="text-gray-600 text-sm pt-10">
+                 Employees in 
+                
+                 {% if request.GET.branch_name or request.GET.branch_id or request.GET.location%}
+        {% if filter.qs.exists %}
+            {{ filter.qs.first.branch_name }}
+        {% endif %}
+    {% else %}
+        All
+    {% endif %}
+         
+                Branch
+             </p>
+             
+             <section class="bg-white w-full dark:bg-dark py-5 lg:py-[50px]">
+                   <div class="flex flex-wrap ">
+                      <div class="w-full ">
+                         <div class="max-w-full overflow-x-auto">
+             <table class="w-full table-auto border-collapse bg-white rounded-lg shadow-md ">
+                 <thead>
+                     <tr class="bg-slate-900 text-white">
+                         <th class="py-2 px-4 text-left border-b">Name</th>
+                         <th class="py-2 px-4 text-left border-b">Position</th>
+                         <th class="py-2 px-4 text-left border-b">Salary</th>
+                         <th class="py-2 px-4 text-left border-b">Date of Hire</th>
+                         <th class="py-2 px-4 text-left border-b">Department</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% for employee in employees %}
+                         <tr class="hover:bg-slate-100">
+                             <td class="py-2 px-4 border-b">{{ employee.user.username }}</td> 
+                             <td class="py-2 px-4 border-b">{{ employee.position }}</td> 
+                             <td class="py-2 px-4 border-b">{{ employee.salary }}</td> 
+                             <td class="py-2 px-4 border-b">{{ employee.date_of_hire }}</td> 
+                             <td class="py-2 px-4 border-b">{{ employee.department }}</td> 
+                         </tr>
+                     {% endfor %}
+                 </tbody>
+             </table>
+             </div>
+             </div>
+             </div>
+             </section>
+         </div>
+ 
+         <!-- Pie chart -->
+         <div class="lg:w-1/3 w-[100%]">
+             <canvas id="positionChart" class="w-full h-full"></canvas>
+         </div>
+     </div>
+ {% endif %}
+ 
+     
+
+     <div class="pt-20">
+        <p class="text-gray-500 text-[13px] pb-3">Branch chart</p>
+        <canvas id="myChart"></canvas>
+      </div>
+      
+      <div class="flex gap-3 items-center h-20 pt-5">
+        <p class="text-gray-600 text-sm">Add a new branch{{ request.GET.q }}</p>
+        <a href="{% url 'create_branch'   %}" class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2">Add</a>
+     </div>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+      <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+    
+        // Ensure labels and data are passed as JavaScript arrays
+        const labels = {{ labels|safe }};
+        const data = {{ data|safe }};
+    
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Employees',
+                    data: data,
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Employees'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Branch'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+<script>
+    const positionCtx = document.getElementById('positionChart');
+
+    new Chart(positionCtx, {
+        type: 'pie',
+        data: {
+            labels: {{ position_labels|safe }},
+            datasets: [{
+                label: 'Employee Positions',
+                data: {{ position_data|safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+</script>
+
+
+
+
+
+</div>
+{% endblock %}

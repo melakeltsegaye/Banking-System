@@ -1,0 +1,207 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+<div class="w-full pb-4">
+        
+    
+    <div class="flex justify-center md:justify-between items-center w-full">
+        <div class="hidden md:block ">
+            <h1 class="text-3xl font-bold pb-3">Group</h1>
+<p class="text-gray-500 text-[13px] pb-3">Group table</p>
+        </div>
+        <form method="POST" class="flex items-end w-full md:w-fit gap-2">
+            {% csrf_token %}
+            <div class="w-[80%]">
+                <label for="group">Select Group:</label>
+            <select name="group" id="group" class="block w-full  py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ">
+                <option value="">--Select a Group--</option>
+                {% for group in groups %}
+                    <option value="{{ group.id }}" {% if group == selected_group %}selected{% endif %}>
+                        {{ group.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            </div>
+            
+            <button  type="submit" class="w-[15%] h-10 bg-gray-50 shadow-md rounded-md flex items-center justify-center" style="border: 1px solid black;">
+                <span class="material-symbols-outlined text-lime-500">filter_alt</span>
+                
+            </button>
+        </form>
+
+    </div>
+    <div class="py-5">
+        
+       <section class="bg-white dark:bg-dark  "></section>
+            <div class="w-full mx-auto">
+               <div class="flex flex-wrap ">
+                  <div class="w-full flex flex-col">
+                    <div class="block md:hidden">
+                        <h1 class="text-3xl font-bold pb-3">Groups</h1>
+            <p class="text-gray-500 text-[13px] pb-3">Group table</p>
+                    </div>
+                     <div class="max-w-full overflow-x-auto ">
+        <table class="w-full table-auto overflow-x-auto">
+            <thead>
+               <tr class="text-center bg-slate-900">
+                  <th class="my-custom-style ">Group</th>
+                  <th class="my-custom-style ">No users</th>
+                  <th class="my-custom-style ">Permissions</th>
+               </tr>
+            </thead>
+            <tbody>
+            {% if selected_group %}
+               <tr>
+                  <td class="my-layout-style">{{ selected_group.name }}</td>
+                  <td class="my-layout-style">
+                    {% if users %}
+                        {{users.count}}
+                    {% else %}
+                        0
+                    {% endif %}
+                  </td>
+                  <td class="my-layout-style">
+                    
+                    {% if selected_group.permissions.all %}
+                {% for permission in selected_group.permissions.all|slice:":2" %}
+                    {{ permission.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                {% if selected_group.permissions.count > 2 %}
+                    ... 
+                {% endif %}
+            {% else %}
+                No permissions
+            {% endif %}
+                  </td>
+                  
+               </tr>
+               {% else %}
+               {% for group in groups %}
+               <tr>
+                  <td class="my-layout-style ">{{ group.name }}</td>
+                  <td class="my-layout-style">{{group.user_set.count}}</td>
+                  <td class="my-layout-style">
+                    {% for permission in group.permissions.all|slice:":2" %}
+                    {{ permission.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                {% if group.permissions.count > 2 %}
+                    ... 
+                {% endif %}
+                  </td>
+                  
+               </tr>
+               {% endfor %}
+               {% endif %}
+            </tbody>
+         </table>
+        </div>
+     </div>
+     </div>
+    </section>
+
+   
+    </div>
+
+    <div class="w-full flex flex-col md:flex-row justify-between md:gap-0 gap-4 pt-8">
+        <div class="md:w-[48%] w-full max-h-96 p-3 h-fit overflow-y-auto rounded-md shadow-md bg-gray-100">
+            {% if selected_group %}
+    <p class="text-gray-500 text-[13px] pb-3">Users in Group: {{ selected_group.name }}</p>
+   
+
+    {{selected_group.Permissions}}
+    {% if users %}
+        <ul>
+            {% for user in users %}
+                <li class="pt-5">{{ user.username }} - {{ user.email }}</li>
+                <hr>
+            {% endfor %}
+        </ul>
+        <!-- {{users.count}} -->
+    {% else %}
+        <p>No users found in this group.</p>
+    {% endif %}
+    {% else %}
+    
+
+    <p class="text-gray-500 text-[13px] ">No user</p>
+   
+{% endif %}
+        </div>
+        <div class="md:w-[48%] w-full  max-h-96 p-3 h-fit overflow-y-auto rounded-md shadow-md bg-gray-100">
+            {% if selected_group %}
+            <p class="text-gray-500 text-[13px] pb-3">Permissions in Group: {{ selected_group.name }}</p>
+           
+        
+            {% if selected_group.permissions.all %}
+                {% for permission in selected_group.permissions.all%}
+                    {{ permission.name }}{% if not forloop.last %}<hr><br>{% endif %}
+                {% endfor %}
+                {% endif %}
+            
+                {% else %}
+    
+
+                <p class="text-gray-500 text-[13px] ">No Permissions</p>    
+           
+        {% endif %}
+        </div>
+    </div>
+
+    <div class="pt-10"></div>
+        <p class="text-gray-500 text-[13px] pb-3">Groups chart</p>
+        <canvas id="myChart"></canvas>
+      </div>
+
+      <div class="flex gap-3">
+        <a href="{% url 'assign_employee' %}" class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2 ">Add Users</a>
+        <a href="{% url 'remove_user_from_group' %}" class="p-2 rounded-md bg-red-500 text-white border-red-600 shadow-md border-2 ">Remove Users</a>
+      </div>
+      
+   
+</div>
+
+
+ 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+<script>
+  const ctx = document.getElementById('myChart').getContext('2d');
+
+  // Ensure labels and data are passed as JavaScript arrays
+  const labels = {{ labels|safe }};
+  const data = {{ data|safe }};
+
+  new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: labels,
+          datasets: [{
+              label: 'Number of Users',
+              data: data,
+              borderWidth: 1,
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  title: {
+                      display: true,
+                      text: 'Number of Users'
+                  }
+              },
+              x: {
+                  title: {
+                      display: true,
+                      text: 'Groups'
+                  }
+              }
+          }
+      }
+  });
+</script>
+
+    
+    {% endblock %}

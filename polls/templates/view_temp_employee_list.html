@@ -1,0 +1,56 @@
+{% extends 'home.html' %}
+{% block main %}
+<div class="w-full">
+    <div class="hidden lg:block">
+        <h1 class="text-3xl font-bold pb-3">Employee Approval</h1>
+<p class="text-gray-500 text-[13px] pb-3">Temporary Employee table</p>
+    </div>
+    <div class="w-full flex flex-col  pt-5">
+        <div class="block lg:hidden">
+            <h1 class="text-3xl font-bold pb-3">Employee Approval</h1>
+<p class="text-gray-500 text-[13px] pb-3">Temporary Employee table</p>
+        </div>
+    <div class="max-w-full overflow-x-auto ">
+    <table class="w-full table-auto overflow-x-auto border">
+        <thead class="border">
+            <tr class="text-center bg-slate-900">
+                <th class="emp-custom-style-head">ID</th>
+                <th class="emp-custom-style-head">Name</th>
+                <th class="emp-custom-style-head">Phone</th>
+                <th class="emp-custom-style-head">Address</th>
+                <th class="emp-custom-style-head">Position</th>
+                <th class="emp-custom-style-head">Department</th>
+                <th class="emp-custom-style-head">Branch</th>
+                <th class="emp-custom-style-head">Date of Hire</th>
+                <th class="emp-custom-style-head">Salary</th>
+                <th class="emp-custom-style-head">Approve</th>
+                <th class="emp-custom-style-head">Reject</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for temp_employee in temp_employees %}
+            <tr>
+                <td class="emp-table-sty">{{ temp_employee.employee_id }}</td>
+                <td class="emp-table-sty">{{ temp_employee.user.username }}</td>
+                <td class="emp-table-sty">{{ temp_employee.phone }}</td>
+                <td class="emp-table-sty">{{ temp_employee.address }}</td>
+                <td class="emp-table-sty">{{ temp_employee.position }}</td>
+                <td class="emp-table-sty">{{ temp_employee.department }}</td>
+                <td class="emp-table-sty">{{ temp_employee.branch }}</td>
+                <td class="emp-table-sty">{{ temp_employee.date_of_hire }}</td>
+                <td class="emp-table-sty">{{ temp_employee.salary }}</td>
+                <td class="emp-table-sty">
+                    <a class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2" href="{% url 'approve_temp_employee' temp_employee.pk %}">Approve</a>
+                </td>
+                <td class="emp-table-sty">
+                    <a class="p-2 rounded-md bg-red-500 text-white border-red-600 shadow-md border-2" href="{% url 'remove_temp_emp' temp_employee.id %}">Reject</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+
+                {% endblock %}

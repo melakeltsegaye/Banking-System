@@ -1,0 +1,52 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+<div class="flex items-center w-full h-full justify-center">
+    <div class="w-[90%] md:w-1/2 bg-slate-100 p-4 rounded-md shadow-lg flex-wrap flex items-start justify-between">
+        <div class="pt-4">
+            <h1 class="text-lg font-bold">Remove User from Group</h1>
+            <p class="text-gray-500 text-[13px] pb-3">Fill the info</p>
+            {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+        </div>
+    
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <form class="space-y-5" method="POST">
+        {% csrf_token %}
+        <div>
+        <label for="group">Select Group:</label>
+        <select name="group" id="group" onchange="this.form.submit()" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="">--Select a Group--</option>
+            {% for group in groups %}
+                <option value="{{ group.id }}" {% if selected_group and group.id == selected_group.id %}selected{% endif %}>
+                    {{ group.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        {% if selected_group %}
+            <label for="user">Select User:</label>
+            <select name="user" id="user" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="">--Select a User--</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+
+        {% if selected_group %}
+        <button type="submit" class="p-2 rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2">Remove</button>
+        {% endif %}
+    </form>
+
+    </div>
+    </div>
+    {% endblock %}

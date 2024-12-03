@@ -1,0 +1,28 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% tailwind_css %}
+    <title>Document</title>
+</head>
+<body class="overflow-hidden">
+    <div class="w-screen h-screen flex items-center justify-center border">
+        <div class=" w-[90%] md:w-[45%] bg-slate-100 h-fit py-5  rounded-md shadow-lg flex-wrap flex flex-col justify-center items-center ">
+            <div class="flex pt-5 items-center cursor-pointer">
+                <img src="../../media/logo-removebg-preview.png" class="w-14 h-fit" alt="Logo">
+                <h1 class="font-bold">SIKET BANK</h1>
+            </div>
+        <form class="space-y-2 w-full p-5 md:p-9"  method="POST" enctype="multipart/form-data" style=" cursor: default;">
+            {% csrf_token %}
+            {{reg}}
+        
+            <button type="submit" class="p-1 w-full rounded-md bg-lime-500 text-white border-lime-600 shadow-md border-2">Submit</button>
+        
+        </form>
+        </div>
+    </div>
+    
+</body>
+</html>

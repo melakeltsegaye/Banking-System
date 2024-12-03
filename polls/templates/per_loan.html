@@ -1,0 +1,131 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+
+<div class="w-full">
+
+    <h1 class="text-3xl font-bold pb-3">Loan</h1>
+                    <p class="text-gray-500 text-[13px] pb-3">Loan status</p>
+                   
+
+                     <div class="flex w-full lg:justify-between flex-col lg:flex-row items-center justify-center gap-4">
+
+                        <!-- assigned taskes  -->
+                        
+                        <div class="lg:w-[48%] w-full rounded-lg max-h-fit min-h-48 bg-gradient-to-tl bg-gray-300 p-3 flex flex-col justify-between ">
+                           <div class=" flex gap-2 items-center">
+                              <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">payments</span>
+                              <p class="text-1xl font-bold ">Loan</p>
+                           </div>
+                            
+
+                            <div class="flex pt-5 items-end gap-1">
+                               
+                              <p class="text-5xl font-bold ">{{lo.amount}}</p>
+                            
+                              <p class="text-2xl text-gray-500">birr</p>
+                            </div>
+
+                            <div class="space-y-4 pt-8">
+                              
+                            <!-- <p class="text-5xl font-bold">Birr {{account.balance}}</p> -->
+
+                           <div class="bg-white w-full p-2 rounded-md shadow-md flex justify-between items-center">
+                              <div>
+                                 <h1 class="text-1xl font-bold">{{ lo.collateral }}</h1>
+                            <p class="text-gray-400 text-sm">{{ lo.status }}</p>
+                              </div>
+                            
+                              <h1 class="text-1xl font-bold ">{{ lo.start_date|date:"M: d" }} - {{ lo.end_date|date:"M: d" }}</h1>
+                        </div> 
+                        
+                            </div>
+                            
+
+                        </div>
+
+                        
+
+
+                        <div class="relative lg:w-[48%] w-full rounded-lg overflow-y-auto h-52  bg-gradient-to-tl bg-gray-300  flex flex-col justify-between pt-11">
+                           <div class=" flex gap-2 items-center bg-slate-900 text-white absolute w-full rounded-t-md top-0">
+                              <span class="material-symbols-outlined text-lime-500 text-[25px] cursor-pointer p-2 w-fit rounded-full bg-slate-900">approval_delegation</span>
+                              <p class="text-1xl font-bold ">Loan Payment</p>
+                           </div>
+                            
+
+                           
+                           
+                            <div class="w-full ">
+                              {% for loan_pay in loan_pay %}
+                            <!-- <p class="text-5xl font-bold">Birr {{account.balance}}</p> -->
+
+                           <div class="bg-gray-300 w-full p-3  shadow-md flex  justify-between items-center ">
+                              <div>
+                                 <h1 class="text-1xl font-bold">{{ loan_pay.amount_paid }}</h1>
+                            <p class="text-gray-400 text-sm">{{ loan_pay.payment_date }}</p> 
+                              </div>                    
+                              <h1 class="text-1xl font-bold ">{{ loan_pay.status }}</h1>
+                              
+                              
+                        </div> 
+                        <hr>
+                        {% endfor %}
+                            </div>
+                            
+
+                        </div>
+
+
+
+                     </div>
+
+</div>
+
+
+                    <p class="text-gray-500 text-[13px] pt-6 pb-2">Loan Payment Schedule</p>
+      
+<div class="w-full flex justify-between lg:flex-row flex-col pb-4">
+
+   <div class="w-full  p-4 bg-gradient-to-tl bg-gray-300 rounded-md h-fit ">
+      <div id='calendar' class="w-full h-auto lg:h-72"></div>
+   </div>
+   
+</div>
+
+
+<!-- <ul>
+   {% for payment in loan_payments %}
+   <li>Payment Date: {{ payment.payment_date }} - Amount Due: {{ payment.amount_due }}</li>
+   {% empty %}
+   <li>No payments scheduled</li>
+   {% endfor %}
+</ul> -->
+
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+       var calendarEl = document.getElementById('calendar');
+       var calendar = new FullCalendar.Calendar(calendarEl, {
+           initialView: 'dayGridMonth',
+           headerToolbar: {
+               left: 'prev,next',
+               center: 'today',
+               right: 'title'
+           },
+           events: [
+               {% for payment in loan_payments %}
+               {
+                   title: 'Payment Due: {{ payment.amount_due }}',
+                   start: '{{ payment.payment_date|date:"Y-m-d" }}',
+                   status: '{{ payment.status }}'
+               },
+               {% endfor %}
+           ]
+       });
+       calendar.render();
+   });
+</script>
+
+{% endblock %}
